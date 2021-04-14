@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN" xmlns:v-on="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login</title>
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" type="text/css" href="../../common/login/login_font/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../../common/login/login_iconic/css/material-design-iconic-font.min.css">
+    <link rel="stylesheet" type="text/css" href="../../common/login/login_css/loginUtil.css">
+    <link rel="stylesheet" type="text/css" href="../../common/login/login_css/loginMain.css">
+    <script src="../../common/util/md5.js"></script>
+    <script src="../../common/vue/vue.js"></script>
+    <script src="../../common/axios/axios.min.js"></script>
+    <script src="../../common/jquery/jquery-3.0.0.min.js"></script>
+    <!-- style="background-image: url('../../common/login/login_image/3.jpg');" -->
+    <!-- v-bind:style="{backgroundImage:'url(' + bg + ')',backgroundRepeat:'no-repeat',backgroundSize:'100% 100%'}" -->
+</head>
+<body>
+    <div class="limiter">
+        <div class="container-login100" id="login_background" style="background-image: url('../../common/login/login_image/3.jpg');">
+            <div id="loginDiv" class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
+                <div id="show_response_msg">
+                    <h1 style="font-size:large;color:orangered;" align="center">{{responseMsg}}</h1>
+                </div>
+                <br>
+                <span class="login100-form-title p-b-49">登录</span>
+                <div v-if="loginType === 'user_password_realm'">
+                    <div class="wrap-input100 validate-input m-b-23" data-validate="请输入用户名">
+                        <span class="label-input100">用户名</span>
+                        <input class="input100" type="text" name="username" placeholder="请输入用户名" autocomplete="off" v-model="username">
+                        <span class="focus-input100" data-symbol="&#xf206;"></span>
+                    </div>
+                    <div class="wrap-input100 validate-input" data-validate="请输入密码">
+                        <span class="label-input100">密码</span>
+                        <input class="input100" type="password" name="password" placeholder="请输入密码" v-model="password">
+                        <span class="focus-input100" data-symbol="&#xf190;"></span>
+                    </div>
+                    <div class="verBox">
+                        <div id="imgVer" style="display:inline-block;"></div>
+                    </div>
+                    <div>
+                        <h1 align="right">
+                            <button v-on:click="changeLoginType('user_phone_realm')">短信验证登录</button>
+                        </h1>
+                    </div>
+                </div>
+                <div v-if="loginType === 'user_phone_realm'">
+                    <div class="wrap-input100 validate-input m-b-23" data-validate="请输入手机号">
+                        <span class="label-input100">手机号</span>
+                        <input class="input100" type="text" name="phoneNumber" placeholder="请输入手机号" autocomplete="off" v-model="phoneNumber">
+                        <span class="focus-input100" data-symbol="&#xf206;"></span>
+                    </div>
+                    <div id="checkCode" class="wrap-input100 validate-input" data-validate="请输入短信验证码">
+                        <span class="label-input100">短信验证码</span>
+                        <input class="input100" type="text" name="checkCode" placeholder="请输入短信验证码" v-model="checkCode">
+                        <span class="focus-input100" data-symbol="&#xf190;"></span>
+                    </div>
+                    <div align="right">
+                        <button v-on:click="getCheckCode">获取验证码验证码</button>
+                    </div>
+                    <div align="right">
+                        <button v-on:click="changeLoginType('user_password_realm')">账号密码登录</button>
+                    </div>
+                    <br>
+                </div>
+                <div class="container-login100-form-btn">
+                    <div class="wrap-login100-form-btn">
+                        <div class="login100-form-bgbtn"></div>
+                        <button class="login100-form-btn" v-on:click="login">登 录</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../../js/login.js"></script>
+    <!--
+        可替换的模型名称
+        2D模型全名称：
+            live2d-widget-model-haruto      小娃娃（男）
+            live2d-widget-model-koharu      小娃娃（女）
+            live2d-widget-model-ni-j        小娃娃（丑）
+            live2d-widget-model-nico        小娃娃（狐狸）
+            live2d-widget-model-nipsilon    小娃娃（粉长头发小娃娃）
+            live2d-widget-model-nito        小娃娃（粉短头发小娃娃）
+            live2d-widget-model-unitychan   小娃娃（黄色长头发小娃娃）
+            live2d-widget-model-chitose     一个帅哥
+            live2d-widget-model-shizuku     坐在课桌上的小美女
+            live2d-widget-model-hibiki      一个小妹妹
+            live2d-widget-model-izumi       一个妹子
+            live2d-widget-model-tsumiki     绿萝
+            live2d-widget-model-miku        初音
+            live2d-widget-model-z16         妹子
+            live2d-widget-model-hijiki      黑猫
+            live2d-widget-model-tororo      白猫
+            live2d-widget-model-wanko       趴在碗里的狗
+    -->
+</body>
+<!--<script src="https://cdn.bootcdn.net/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://eqcn.ajz.miesnfu.com/wp-content/plugins/wp-3d-pony/live2dw/lib/L2Dwidget.min.js"></script>
+<script>
+    L2Dwidget.init({
+        "model": {
+            //这里改模型，前面后面都要改
+            jsonPath: "https://unpkg.com/live2d-widget-model-hibiki/assets/hibiki.model.json",
+            "scale": 1
+        },
+        "display": {
+            "position": "right",//设置看板娘的上下左右位置
+            "width": 200,
+            "height": 500,
+            "hOffset": 70,
+            "vOffset": 70
+        },
+        "mobile": {
+            "show": true,
+            "scale": 0.5
+        },
+        "react": {
+            "opacityDefault": 0.9,//设置透明度
+            "opacityOnHover": 0.2
+        }
+    });
+    window.onload = function () {
+        $("#live2dcanvas").attr("style", "position: fixed; opacity: 0.9; left: 200px; bottom: 0px; z-index: 1; pointer-events: none;")
+    }
+</script>-->
+</html>

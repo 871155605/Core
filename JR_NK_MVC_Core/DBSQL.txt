@@ -1,0 +1,1 @@
+﻿Scaffold-DbContext "Data Source=127.0.0.1;Initial Catalog=ApiTestDb;User=sa;Password=1" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Entities -Context JRDBContext -Force

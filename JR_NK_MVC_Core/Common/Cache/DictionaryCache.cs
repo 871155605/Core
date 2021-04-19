@@ -42,7 +42,7 @@ namespace JR_NK_MVC_Core.Common.Cache
 
         public string Get(string key)
         {
-            throw new NotImplementedException();
+            return (string)cacheDictionary.GetValueOrDefault(key);
         }
 
         public T Get<T>(string key)

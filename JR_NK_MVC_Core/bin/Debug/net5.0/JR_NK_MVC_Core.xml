@@ -821,12 +821,6 @@
             签名
             </summary>
         </member>
-        <member name="M:JR_NK_MVC_Core.Common.JWT.JwtToken.BuildJwtToken">
-            <summary>
-            获取基于JWT的Token
-            </summary>
-            <returns></returns>
-        </member>
         <member name="T:JR_NK_MVC_Core.Common.JWT.PermissionHandler">
             <summary>
             权限授权处理器
@@ -1257,12 +1251,6 @@
             <param name="token"></param>
             <returns></returns>
         </member>
-        <member name="M:JR_NK_MVC_Core.Controllers.JWTController.GetToken">
-            <summary>
-            获取令牌
-            </summary>
-            <returns></returns>
-        </member>
         <member name="M:JR_NK_MVC_Core.Controllers.JWTController.Test">
             <summary>
             测试获取令牌是否成功
@@ -1307,12 +1295,22 @@
             <param name="socketId"></param>
             <returns></returns>
         </member>
+        <member name="P:JR_NK_MVC_Core.Models.PageQueryReq.PageSize">
+            <summary>
+            每页显示数
+            </summary>
+        </member>
+        <member name="P:JR_NK_MVC_Core.Models.PageQueryReq.CurrentPage">
+            <summary>
+            当前页
+            </summary>
+        </member>
         <member name="T:JR_NK_MVC_Core.Service.ISysAdminService">
             <summary>
             权限管理服务
             </summary>
         </member>
-        <member name="M:JR_NK_MVC_Core.Service.ISysAdminService.LoadUser(System.String,System.String)">
+        <member name="M:JR_NK_MVC_Core.Service.ISysAdminService.LoadUserAsync(System.String,System.String)">
             <summary>
             管理员登录
             </summary>
@@ -1320,49 +1318,57 @@
             <param name="password"></param>
             <returns></returns>
         </member>
-        <member name="M:JR_NK_MVC_Core.Service.ISysAdminService.GetJwtToken(System.Collections.Generic.List{JR_NK_MVC_Core.Common.JWT.PermissionItem})">
+        <member name="M:JR_NK_MVC_Core.Service.ISysAdminService.GetJwtTokenAsync(System.Collections.Generic.List{JR_NK_MVC_Core.Common.JWT.PermissionItem},System.String)">
             <summary>
             获取用户TOKEN
             </summary>
             <param name="permissions"></param>
+            <param name="uniqueName">账号</param>
             <returns></returns>
         </member>
-        <member name="M:JR_NK_MVC_Core.Service.ISysAdminService.LoadPermissionItems(JR_NK_MVC_Core.Entities.SysUser)">
+        <member name="M:JR_NK_MVC_Core.Service.ISysAdminService.LoadPermissionItemsAsync(JR_NK_MVC_Core.Entities.SysUser)">
             <summary>
             加载所有权限
             </summary>
             <param name="user"></param>
             <returns></returns>
         </member>
-        <member name="M:JR_NK_MVC_Core.Service.ISysAdminService.AddUser(JR_NK_MVC_Core.Entities.SysUser)">
+        <member name="M:JR_NK_MVC_Core.Service.ISysAdminService.LoadUsersAsync(JR_NK_MVC_Core.Models.SysUserReq)">
+            <summary>
+            加载所有用户
+            </summary>
+            <param name="req"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JR_NK_MVC_Core.Service.ISysAdminService.AddUserAsync(JR_NK_MVC_Core.Entities.SysUser)">
             <summary>
             添加用户
             </summary>
             <param name="user"></param>
             <returns></returns>
         </member>
-        <member name="M:JR_NK_MVC_Core.Service.ISysAdminService.AddUserRoles(System.Collections.Generic.List{JR_NK_MVC_Core.Entities.SysUserRole})">
+        <member name="M:JR_NK_MVC_Core.Service.ISysAdminService.AddUserRolesAsync(System.Collections.Generic.List{JR_NK_MVC_Core.Entities.SysUserRole})">
             <summary>
             给用户添加角色
             </summary>
             <param name="urs"></param>
             <returns></returns>
         </member>
-        <member name="M:JR_NK_MVC_Core.Service.ISysAdminService.AddRole(JR_NK_MVC_Core.Entities.SysRole)">
+        <member name="M:JR_NK_MVC_Core.Service.ISysAdminService.AddRoleAsync(JR_NK_MVC_Core.Entities.SysRole)">
             <summary>
             添加角色
             </summary>
             <param name="role"></param>
             <returns></returns>
         </member>
-        <member name="M:JR_NK_MVC_Core.Service.ISysAdminService.AddRoleMenus(System.Collections.Generic.List{JR_NK_MVC_Core.Entities.SysRoleMenu})">
+        <member name="M:JR_NK_MVC_Core.Service.ISysAdminService.AddRoleMenusAsync(System.Collections.Generic.List{JR_NK_MVC_Core.Entities.SysRoleMenu})">
             <summary>
             给角色添加权限
             </summary>
             <param name="rms"></param>
             <returns></returns>
         </member>
-        <member name="M:JR_NK_MVC_Core.Service.ISysAdminService.AddMenu(JR_NK_MVC_Core.Entities.SysMenu)">
+        <member name="M:JR_NK_MVC_Core.Service.ISysAdminService.AddMenuAsync(JR_NK_MVC_Core.Entities.SysMenu)">
             <summary>
             添加权限
             </summary>

@@ -30,11 +30,11 @@ namespace JR_NK_MVC_Core.Controllers
         {
             try
             {
-                SysUser user = await _adminService.LoadUser(req.Username, req.Password);
-                if (user == null) return GlobalResponse.Of(-1000, "账号密码错误");
-                List<PermissionItem> permissionItems = await _adminService.LoadPermissionItems(user);
+                SysUser user = await _adminService.LoadUserAsync(req.Username, req.Password);
+                if (user == null) return GlobalResponse.Of(-1000,"账号密码错误");
+                List<PermissionItem> permissionItems = await _adminService.LoadPermissionItemsAsync(user);
                 if (permissionItems == null) return GlobalResponse.Of(-1,"权限加载失败");
-                var tokenJson = await _adminService.GetJwtToken(permissionItems);
+                var tokenJson = await _adminService.GetJwtTokenAsync(permissionItems,req.Username);
                 return GlobalResponse.Of(new LoginRes { User = user, PermissionItems = permissionItems, TokenJson = tokenJson });
             }
             catch (Exception e)
@@ -44,10 +44,11 @@ namespace JR_NK_MVC_Core.Controllers
             }
         }
 
-        [HttpGet("query")]
+        [HttpPost("query")]
         [Authorize("Custom")]
-        public GlobalResponse Test() {
-            return GlobalResponse.Of();
+        public async Task<GlobalResponse> Test([FromBody] SysUserReq req) {
+            var resp = await _adminService.LoadUsersAsync(req);
+            return GlobalResponse.Of(resp);
         }
     }
 }

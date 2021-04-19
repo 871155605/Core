@@ -14,16 +14,6 @@ namespace JR_NK_MVC_Core.Controllers
     {
 
         /// <summary>
-        /// 获取令牌
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("getToken")]
-        public dynamic GetToken()
-        {
-            return JwtToken.BuildJwtToken();
-        }
-
-        /// <summary>
         /// 测试获取令牌是否成功
         /// </summary>
         /// <returns></returns>

@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <script src="../../common/vue/vue.js"></script>
+    <script src="../../common/axios/axios.min.js"></script>
+    <script src="../../common/jquery/jquery-3.0.0.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+</head>
+<body>
+    <div id="app">
+        <template>
+            <div>
+                <el-table :data="tableData"
+                          style="width: 100%">
+                    <el-table-column prop="account"
+                                     label="账号"
+                                     width="100px">
+                    </el-table-column>
+                    <el-table-column prop="nickName"
+                                     label="昵称"
+                                     width="100px">
+                    </el-table-column>
+                    <el-table-column prop="name"
+                                     label="名字">
+                    </el-table-column>
+                    <el-table-column fixed="right"
+                                     label="操作"
+                                     width="150px">
+                    <template slot-scope="scope">
+                        <el-button @click="" type="text" size="small">查看</el-button>
+                        <el-button @click="" type="text" size="small">编辑</el-button>
+                        <el-button @click="" type="text" size="small">删除</el-button>
+                    </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+            <div>
+                <el-pagination @size-change="handleSizeChange"
+                               @current-change="handleCurrentChange"
+                               :current-page="currentPage"
+                               :page-sizes="pageSizes"
+                               :page-size="PageSize" layout="total, sizes, prev, pager, next, jumper"
+                               :total="totalCount">
+                </el-pagination>
+            </div>
+        </template>
+    </div>
+    <script>
+        new Vue({
+            el: "#app",
+            data: {
+                tableData: [],
+                currentPage: 1,
+                totalCount: 1,
+                pageSizes: [1, 2, 3, 4],
+                PageSize: 1,
+                SysUserReq:{}
+            },
+            methods: {
+                getData: function (n1, n2) {
+                    this.SysUserReq = { orgCode: 1, PageSize: n1, currentPage: n2, };
+                    axios.post('/home/query',this.$data).then(response => {
+                        if (response.data.code === 1) {
+                            console.log(response.data.data);
+                            this.tableData = response.data.data.tableData;
+                            this.totalCount = response.data.data.totalCount;
+                        } else {
+                            alert(response.data.message);
+                        }
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+                },
+                // 每页显示的条数
+                handleSizeChange:function(val) {
+                    // 改变每页显示的条数 
+                    this.PageSize = val;
+                    // 点击每页显示的条数时，显示第一页
+                    this.getData(val, 1);
+                    // 注意：在改变每页显示的条数时，要将页码显示到第一页
+                    this.currentPage = 1;
+                },
+                // 显示第几页
+                handleCurrentChange:function(val) {
+                    // 改变默认的页数
+                    this.currentPage = val;
+                    // 切换页码时，要获取每页显示的条数
+                    this.getData(this.PageSize, (val) * (this.pageSize));
+                },
+            },
+            created: function () {
+                this.getData(this.PageSize, this.currentPage)
+            }
+        });
+    </script>
+</body>
+</html>

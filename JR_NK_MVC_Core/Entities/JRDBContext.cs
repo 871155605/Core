@@ -1,6 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
+using Microsoft.Extensions.Logging.Debug;
 
 #nullable disable
 
@@ -8,6 +11,7 @@ namespace JR_NK_MVC_Core.Entities
 {
     public partial class JRDBContext : DbContext
     {
+
         public JRDBContext()
         {
         }
@@ -25,10 +29,6 @@ namespace JR_NK_MVC_Core.Entities
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer("");
-            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

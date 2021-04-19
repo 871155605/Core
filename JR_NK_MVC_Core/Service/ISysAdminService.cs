@@ -1,5 +1,6 @@
 ﻿using JR_NK_MVC_Core.Common.JWT;
 using JR_NK_MVC_Core.Entities;
+using JR_NK_MVC_Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,54 +19,62 @@ namespace JR_NK_MVC_Core.Service
         /// <param name="account"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public Task<SysUser> LoadUser(string account, string password);
+        public Task<SysUser> LoadUserAsync(string account, string password);
 
         /// <summary>
         /// 获取用户TOKEN
         /// </summary>
         /// <param name="permissions"></param>
+        /// <param name="uniqueName">账号</param>
         /// <returns></returns>
-        public Task<string> GetJwtToken(List<PermissionItem> permissions);
+        public Task<string> GetJwtTokenAsync(List<PermissionItem> permissions,string uniqueName);
 
         /// <summary>
         /// 加载所有权限
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public Task<List<PermissionItem>> LoadPermissionItems(SysUser user);
+        public Task<List<PermissionItem>> LoadPermissionItemsAsync(SysUser user);
+
+        /// <summary>
+        /// 加载所有用户
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        public Task<PageQueryRes> LoadUsersAsync(SysUserReq req);
 
         /// <summary>
         /// 添加用户
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public Task<bool> AddUser(SysUser user);
+        public Task<bool> AddUserAsync(SysUser user);
 
         /// <summary>
         /// 给用户添加角色
         /// </summary>
         /// <param name="urs"></param>
         /// <returns></returns>
-        public Task<bool> AddUserRoles(List<SysUserRole> urs);
+        public Task<bool> AddUserRolesAsync(List<SysUserRole> urs);
 
         /// <summary>
         /// 添加角色
         /// </summary>
         /// <param name="role"></param>
         /// <returns></returns>
-        public Task<bool> AddRole(SysRole role);
+        public Task<bool> AddRoleAsync(SysRole role);
 
         /// <summary>
         /// 给角色添加权限
         /// </summary>
         /// <param name="rms"></param>
         /// <returns></returns>
-        public Task<bool> AddRoleMenus(List<SysRoleMenu> rms);
+        public Task<bool> AddRoleMenusAsync(List<SysRoleMenu> rms);
         /// <summary>
         /// 添加权限
         /// </summary>
         /// <param name="menu"></param>
         /// <returns></returns>
-        public Task<bool> AddMenu(SysMenu menu);
+        public Task<bool> AddMenuAsync(SysMenu menu);
     }
 }

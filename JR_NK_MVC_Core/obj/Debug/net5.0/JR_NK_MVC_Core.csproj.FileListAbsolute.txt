@@ -406,3 +406,5 @@ C:\Work\WorkSpace\JR_NK_MVC_Core\JR_NK_MVC_Core\bin\Debug\net5.0\MiniProfiler.As
 C:\Work\WorkSpace\JR_NK_MVC_Core\JR_NK_MVC_Core\bin\Debug\net5.0\MiniProfiler.AspNetCore.Mvc.dll
 C:\Work\WorkSpace\JR_NK_MVC_Core\JR_NK_MVC_Core\bin\Debug\net5.0\MiniProfiler.Shared.dll
 C:\Work\WorkSpace\JR_NK_MVC_Core\JR_NK_MVC_Core\bin\Debug\net5.0\Swashbuckle.AspNetCore.Filters.Abstractions.dll
+C:\Work\WorkSpace\JR_NK_MVC_Core\JR_NK_MVC_Core\bin\Debug\net5.0\Microsoft.EntityFrameworkCore.DynamicLinq.dll
+C:\Work\WorkSpace\JR_NK_MVC_Core\JR_NK_MVC_Core\bin\Debug\net5.0\System.Linq.Dynamic.Core.dll

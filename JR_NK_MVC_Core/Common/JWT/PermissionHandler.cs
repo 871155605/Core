@@ -1,4 +1,5 @@
-﻿using JR_NK_MVC_Core.Common.Cache;
+﻿using Furion.LinqBuilder;
+using JR_NK_MVC_Core.Common.Cache;
 using JR_NK_MVC_Core.Common.Logger;
 using JR_NK_MVC_Core.Entities;
 using JR_NK_MVC_Core.Service;
@@ -41,9 +42,9 @@ namespace JR_NK_MVC_Core.Common.JWT
             //获取HttpContext
             var httpContext = _accessor.HttpContext;
             string questUrl = httpContext.Request.Path.Value.ToLower();
+            //获取token
+            httpContext.Request.Headers.TryGetValue("Authorization",out StringValues token);
             _logger.Info(typeof(PermissionHandler), questUrl);
-            //获取所有权限菜单存入缓存
-            //List<PermissionItem> alls = _cache.Get<List<PermissionItem>>("AllPERMISSIONS");
             //判断请求是否停止
             var handlers = httpContext.RequestServices.GetRequiredService<IAuthenticationHandlerProvider>();
             foreach (var scheme in await _schemes.GetRequestHandlerSchemesAsync())
@@ -61,6 +62,43 @@ namespace JR_NK_MVC_Core.Common.JWT
                 if (result?.Principal != null)//登录成功
                 {
                     httpContext.User = result.Principal;
+                    /*#region 校验TOKEN是否过期(框架自带版)
+                    string timeString = httpContext.User.Claims.SingleOrDefault(s => s.Type == ClaimTypes.Expiration)?.Value;
+                    if (timeString != null && DateTime.Parse(timeString) >= DateTime.Now)
+                    {
+                        context.Succeed(requirement);
+                        return;
+                    }
+                    else
+                    {
+                        context.Fail();
+                        return;
+                    }
+                    #endregion*/
+                    #region 校验TOKEN是否过期(自定义版)
+                    var account = httpContext.User.Claims.SingleOrDefault(s => s.Type == ClaimTypes.Name)?.Value;
+                    Console.WriteLine(account);
+                    if (account.IsNullOrEmpty()) {
+                        context.Fail();
+                        return;
+                    }
+                    long expiredSecond = _cache.Get<long>(account);
+                    Console.WriteLine($"TOKEN过期时间:{expiredSecond}");
+                    long nowSecond = (long)new TimeSpan(DateTime.UtcNow.Ticks).TotalSeconds;
+                    Console.WriteLine($"调用接口时间:{nowSecond}");
+                    if (nowSecond <= expiredSecond)
+                    {
+                        expiredSecond = (long)(nowSecond + PermissionRequirement.Expiration.TotalSeconds);
+                        Console.WriteLine($"刷新TOKEN过期时间:{expiredSecond}");
+                        _cache.Set(account, expiredSecond);
+                    }
+                    else
+                    {
+                        //_cache.Del(account);//回收过期token
+                        context.Fail();
+                        return;
+                    }
+                    #endregion
                     #region 自定义权限校验规则 获取当前用户的角色(此处业务用的是权限)信息
                     var currentUserRoles = (from item in httpContext.User.Claims
                                             where item.Type == PermissionRequirement.ClaimType
@@ -71,16 +109,8 @@ namespace JR_NK_MVC_Core.Common.JWT
                         context.Fail();
                         return;
                     }
-                    #endregion
-                    #region 校验TOKEN是否过期
-                    if ((httpContext.User.Claims.SingleOrDefault(s => s.Type == ClaimTypes.Expiration)?.Value) != null && DateTime.Parse(httpContext.User.Claims.SingleOrDefault(s => s.Type == ClaimTypes.Expiration)?.Value) >= DateTime.Now)
-                    {
+                    else {
                         context.Succeed(requirement);
-                        return;
-                    }
-                    else
-                    {
-                        context.Fail();
                         return;
                     }
                     #endregion

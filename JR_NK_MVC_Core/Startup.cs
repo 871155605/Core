@@ -14,6 +14,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Debug;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
@@ -35,6 +37,8 @@ namespace JR_NK_MVC_Core
         public static ILoggerRepository LogRepository { get; set; }
         public IConfiguration Configuration { get; }
 
+        public static readonly ILoggerFactory sqlLogger= LoggerFactory.Create(builder => { builder.AddConsole(); });
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -49,12 +53,11 @@ namespace JR_NK_MVC_Core
             #region 注册配置信息
             services.AddOptions();
             services.Configure<CacheOptions>(Configuration.GetSection("Cache"));
-            //services.Configure<JwtOptions>(Configuration.GetSection("JwtSetting")); 采用下面一种方式获取配置信息 方便在静态类中使用
             //读取JWR配置并构建PermissionRequirement
             PermissionRequirement permissionRequirement =  SetPermissionRequirement();
             services.AddDbContext<JRDBContext>(options =>
             {
-                options.UseSqlServer(Configuration["SqlServerconStr"]);
+                options.UseLoggerFactory(sqlLogger).UseSqlServer(Configuration["SqlServerconStr"]);
             });
             #endregion
             #region 注册服务

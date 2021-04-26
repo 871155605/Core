@@ -6,7 +6,7 @@
       "launchBrowser": true,
       "launchUrl": "pages/home/login.html",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "DEVELOPMENT"  //DE
+        "ASPNETCORE_ENVIRONMENT": "DEVELOPMENT"
       },
       "nativeDebugging": false,
       "applicationUrl": "http://192.168.10.152:5001;http://192.168.10.152:5000"

@@ -2,6 +2,7 @@
 using JR_NK_MVC_Core.Common.Cache;
 using JR_NK_MVC_Core.Common.JWT;
 using JR_NK_MVC_Core.Common.Logger;
+using JR_NK_MVC_Core.Common.Until;
 using JR_NK_MVC_Core.Entities;
 using JR_NK_MVC_Core.Models;
 using Microsoft.EntityFrameworkCore;
@@ -29,7 +30,6 @@ namespace JR_NK_MVC_Core.Service.Impl
 
         public async Task<SysUser> LoadUserAsync(string account, string password)
         {
- 
             List<SysUser> users = await _dbcontext.SysUsers.Where(_ => _.Account == account && _.Password == password).ToListAsync();
             SysUser user = null;
             if (users != null && users.Count > 0)
@@ -38,49 +38,80 @@ namespace JR_NK_MVC_Core.Service.Impl
                 _cache.Set(user.Account, user);
                 _logger.Info(typeof(SysAdminServiceImpl), $"ADD USER TO CACHE.USERID:{user.Account}");
             }
+            //SysUser user = await DapperSqlHelper.QueryFirstOrDefaultAsync<SysUser>($"SELECT * FROM sys_user WHERE Account = '{account}' And Password = '{password}';");
             return user;
         }
-
-        public async Task<List<PermissionItem>> LoadPermissionItemsAsync(SysUser user)
-        {
-            List<PermissionItem> permissionItems = new List<PermissionItem>();
-            if (user == null)
-            {//加载所有权限与菜单
-                List<SysUserRole> urs = await _dbcontext.SysUserRoles.Include(user_role => user_role.SysRole).ToListAsync();
-                permissionItems = await LoadPermissionItemsByURsAsync(urs);
-                _cache.Set("AllPERMISSIONS", permissionItems);
-                _logger.Info(typeof(SysAdminServiceImpl), $"ADD ALL PERMISSION LIST TO CACHE. COUNT {permissionItems.Count}");
-            }
-            else
-            {//加载用户的权限与菜单  因为在登录时加载 所以无需缓存
-                List<SysUserRole> urs = await _dbcontext.SysUserRoles.Where(user_role => user_role.SysUserId == user.Id).Include(user_role => user_role.SysRole).ToListAsync();
-                permissionItems = await LoadPermissionItemsByURsAsync(urs);
-                //_cache.Set(user.Account, permissionItems);
-                //_logger.Info(typeof(SysAdminServiceImpl), $"ADD USER:{user.Account} PERMISSION LIST TO CACHE. COUNT {permissionItems.Count}");
-            }
-            return permissionItems;
-        }
-
-        private async Task<List<PermissionItem>> LoadPermissionItemsByURsAsync(List<SysUserRole> urs) {
-            List<PermissionItem> permissionItems = new List<PermissionItem>();
-            foreach (var ur in urs)
+        public async Task<Dictionary<string,Object>> LoadUserPermissionMenusAsync(string account) {
+            Dictionary<string, Object> keyValues = new Dictionary<string, object>();
+            List<string> permissionStringList = new List<string>();
+            List<PermissionMenu> permissionMenuList = new List<PermissionMenu>();
+            keyValues.Add("menus",permissionMenuList);
+            keyValues.Add("permissions", permissionStringList);
+            string sql1 = $@"SELECT sys_menu.* FROM sys_user,sys_role,sys_role_menu,sys_menu
+                    WHERE sys_role.ID = sys_role_menu.SysRoleId AND sys_role_menu.SysMenuId = sys_menu.ID AND sys_user.Account = '{account}' AND Type = 1;";
+            _logger.Info(typeof(SysAdminServiceImpl),sql1);
+            List<SysMenu> sysMenus1 = (List<SysMenu>) await DapperSqlHelper.QueryAsync<SysMenu>(sql1);
+            foreach (var item1 in sysMenus1)
             {
-                List<SysRoleMenu> rms = await _dbcontext.SysRoleMenus.Where(_ => _.SysRoleId == ur.SysRoleId).Include(role_menu => role_menu.SysMenu).Include(role_menu => role_menu.SysRole).ToListAsync();
-                var list = (from item in rms
-                            orderby item.SysRoleId
-                            select new PermissionItem
+                PermissionMenu permission1 = new PermissionMenu { IconCls = item1.Icon, Name = item1.Name,Path= item1.Link, Code = item1.Code };
+                permissionStringList.Add(item1.Permission);
+                permissionMenuList.Add(permission1);
+                string sql2 = $"SELECT * FROM sys_menu WHERE PID = {item1.Id} AND Type = 2;";
+                _logger.Info(typeof(SysAdminServiceImpl), sql2);
+                List<SysMenu> sysMenus2 = (List<SysMenu>)await DapperSqlHelper.QueryAsync<SysMenu>(sql2);
+                if (sysMenus2 != null && sysMenus2.Count > 0)
+                {
+                    List<PermissionMenu> Children1 = new List<PermissionMenu>();
+                    permission1.Children = Children1;
+                    foreach (var item2 in sysMenus2)
+                    {
+                        permissionStringList.Add(item2.Permission);
+                        PermissionMenu permission2 = new PermissionMenu { IconCls = item2.Icon, Name = item2.Name, Path = item2.Link,Code=item2.Code };
+                        Children1.Add(permission2);
+                        string sql3 = $"SELECT * FROM sys_menu WHERE PID = {item2.Id} AND Type = 3;";
+                        _logger.Info(typeof(SysAdminServiceImpl), sql3);
+                        List<SysMenu> sysMenus3 = (List<SysMenu>)await DapperSqlHelper.QueryAsync<SysMenu>(sql3);
+                        if (sysMenus3 != null && sysMenus3.Count > 0)
+                        {
+                            List<PermissionMenu> Children2 = new List<PermissionMenu>();
+                            permission2.Children = Children2;
+                            foreach (var item3 in sysMenus3)
                             {
-                                Link = item.SysMenu?.Link,
-                                Pid = item.SysMenu?.Pid,
-                                Permission = item.SysMenu?.Permission,
-                                Role = item.SysRole?.Name,
-                            }).ToList();
-                permissionItems.InsertRange(permissionItems.Count, list);
+                                permissionStringList.Add(item3.Permission);
+                                PermissionMenu permission3 = new PermissionMenu { IconCls = item3.Icon, Name = item3.Name, Path = item3.Link, Code = item3.Code };
+                                Children2.Add(permission3);
+                                List<string> button3 = await LoadPermissionButtonAsync(item3,permissionStringList);
+                                permission3.Button = button3;
+                            }
+                        }
+                        else {
+                            List<string> button2 = await LoadPermissionButtonAsync(item2,permissionStringList);
+                            permission2.Button = button2;
+                        }
+                    }
+                }
+                else {
+                    List<string> button1 = await LoadPermissionButtonAsync(item1,permissionStringList);
+                    permission1.Button = button1;
+                }
             }
-            return permissionItems;
+            return keyValues;
         }
 
-        public Task<string> GetJwtTokenAsync(List<PermissionItem> permissions,string uniqueName)
+        private async Task<List<string>> LoadPermissionButtonAsync(SysMenu sysMenu,List<string> permissionStringList)
+        {
+            string sql = "SELECT * FROM sys_menu WHERE pid = @id AND type = 4";
+            List<SysMenu> sysMenus = (List<SysMenu>)await DapperSqlHelper.QueryAsync<SysMenu>(sql,sysMenu);
+            List<string> button = new List<string>();
+            foreach (var item in sysMenus)
+            {
+                button.Add(item.Permission);
+                permissionStringList.Add(item.Permission);
+            }
+            return button;
+        }
+
+        public Task<string> GetJwtTokenAsync(List<string> permissions, string uniqueName)
         {
             return Task.Run(() =>
             {
@@ -97,9 +128,9 @@ namespace JR_NK_MVC_Core.Service.Impl
                 new Claim(JwtRegisteredClaimNames.Aud,aud),
                 new Claim(ClaimTypes.Name, uniqueName)};
                 var now = DateTime.Now;
-                foreach (var permissionItem in permissions)
+                foreach (var permission in permissions)
                 {
-                    claims = claims.Append(new Claim(ClaimTypes.Role, permissionItem.Permission)).ToArray();
+                    claims = claims.Append(new Claim(ClaimTypes.Role, permission)).ToArray();
                 }
                 var jwt = new JwtSecurityToken(
                     issuer: iss,

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace JR_NK_MVC_Core.Common.Cache
 {
-    public class RedisCache : ICache//,ISingleton
+    public class RedisCache : ICache
     {
         public RedisCache(IOptions<CacheOptions> cacheOptions)
         {

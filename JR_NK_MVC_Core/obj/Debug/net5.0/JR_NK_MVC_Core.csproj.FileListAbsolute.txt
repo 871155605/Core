@@ -408,3 +408,11 @@ C:\Work\WorkSpace\JR_NK_MVC_Core\JR_NK_MVC_Core\bin\Debug\net5.0\MiniProfiler.Sh
 C:\Work\WorkSpace\JR_NK_MVC_Core\JR_NK_MVC_Core\bin\Debug\net5.0\Swashbuckle.AspNetCore.Filters.Abstractions.dll
 C:\Work\WorkSpace\JR_NK_MVC_Core\JR_NK_MVC_Core\bin\Debug\net5.0\Microsoft.EntityFrameworkCore.DynamicLinq.dll
 C:\Work\WorkSpace\JR_NK_MVC_Core\JR_NK_MVC_Core\bin\Debug\net5.0\System.Linq.Dynamic.Core.dll
+C:\Work\WorkSpace\JR_NK_MVC_Core\JR_NK_MVC_Core\bin\Debug\net5.0\NPOI.OOXML.dll
+C:\Work\WorkSpace\JR_NK_MVC_Core\JR_NK_MVC_Core\bin\Debug\net5.0\NPOI.OpenXml4Net.dll
+C:\Work\WorkSpace\JR_NK_MVC_Core\JR_NK_MVC_Core\bin\Debug\net5.0\NPOI.OpenXmlFormats.dll
+C:\Work\WorkSpace\JR_NK_MVC_Core\JR_NK_MVC_Core\bin\Debug\net5.0\NPOI.dll
+C:\Work\WorkSpace\JR_NK_MVC_Core\JR_NK_MVC_Core\bin\Debug\net5.0\BouncyCastle.Crypto.dll
+C:\Work\WorkSpace\JR_NK_MVC_Core\JR_NK_MVC_Core\bin\Debug\net5.0\ICSharpCode.SharpZipLib.dll
+C:\Work\WorkSpace\JR_NK_MVC_Core\JR_NK_MVC_Core\bin\Debug\net5.0\Chsword.Excel2Object.dll
+C:\Work\WorkSpace\JR_NK_MVC_Core\JR_NK_MVC_Core\bin\Debug\net5.0\CTRC.dll

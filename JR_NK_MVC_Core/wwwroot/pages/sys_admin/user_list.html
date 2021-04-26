@@ -5,12 +5,36 @@
     <script src="../../common/vue/vue.js"></script>
     <script src="../../common/axios/axios.min.js"></script>
     <script src="../../common/jquery/jquery-3.0.0.min.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <link rel="stylesheet" href="../../common/element/index.css">
+    <script src="../../common/element/index.js"></script>
+    <script src="../../js/error.js"></script>
 </head>
 <body>
     <div id="app">
         <template>
+            <div>
+                <table>
+                    <tr>
+                        <td>
+                            <div class="block">
+                                <el-date-picker v-model="Date"
+                                                type="datetimerange"
+                                                range-separator="至"
+                                                start-placeholder="开始时间"
+                                                end-placeholder="结束时间"
+                                                align="right">
+                                </el-date-picker>
+                            </div>
+                        </td>
+                        <td>
+                            <el-radio v-model="Status" label="1">启用</el-radio>
+                            <el-radio v-model="Status" label="2">禁用</el-radio>
+                        </td>
+                    </tr>
+                    <tr>
+                    </tr>
+                </table>
+            </div>
             <div>
                 <el-table :data="tableData"
                           style="width: 100%">
@@ -28,11 +52,12 @@
                     <el-table-column fixed="right"
                                      label="操作"
                                      width="150px">
-                    <template slot-scope="scope">
-                        <el-button @click="" type="text" size="small">查看</el-button>
-                        <el-button @click="" type="text" size="small">编辑</el-button>
-                        <el-button @click="" type="text" size="small">删除</el-button>
-                    </template>
+                        <template slot-scope="scope">
+                            <el-button @click="" type="text" size="small" v-if="checkPermsission('Query')">查看</el-button>
+                            <el-button @click="" type="text" size="small" v-if="checkPermsission('Add')">增加</el-button>
+                            <el-button @click="" type="text" size="small" v-if="checkPermsission('Update')">编辑</el-button>
+                            <el-button @click="" type="text" size="small" v-if="checkPermsission('Delete')">删除</el-button>
+                        </template>
                     </el-table-column>
                 </el-table>
             </div>
@@ -48,20 +73,25 @@
         </template>
     </div>
     <script>
+        axios.defaults.headers.Authorization = JSON.parse(sessionStorage.getItem("Authorization"));
         new Vue({
             el: "#app",
             data: {
+                title:'AdminUser',
                 tableData: [],
                 currentPage: 1,
                 totalCount: 1,
-                pageSizes: [1, 2, 3, 4],
-                PageSize: 1,
-                SysUserReq:{}
+                pageSizes: [5, 10, 20, 30,40,50],
+                PageSize: 10,
+                SysUserReq: {},
+                Date: [],
+                Status: '1',
+                Permissions:[]
             },
             methods: {
                 getData: function (n1, n2) {
                     this.SysUserReq = { orgCode: 1, PageSize: n1, currentPage: n2, };
-                    axios.post('/home/query',this.$data).then(response => {
+                    axios.post('/admin/user', this.$data).then(response => {
                         if (response.data.code === 1) {
                             console.log(response.data.data);
                             this.tableData = response.data.data.tableData;
@@ -70,7 +100,7 @@
                             alert(response.data.message);
                         }
                     }).catch(function (error) {
-                        console.log(error);
+                        redirect(error);
                     });
                 },
                 // 每页显示的条数
@@ -89,9 +119,19 @@
                     // 切换页码时，要获取每页显示的条数
                     this.getData(this.PageSize, (val) * (this.pageSize));
                 },
+                checkPermsission(button_name) {
+                    for (var i = 0; i < this.Permissions.length; i++) {
+                        //console.log((this.title + button_name).toLowerCase());
+                        //console.log(this.Permissions[i].toLowerCase());
+                        if (this.Permissions[i].toLowerCase() === (this.title + button_name).toLowerCase()) return true;
+                    }
+                    return (false);
+                }
             },
             created: function () {
-                this.getData(this.PageSize, this.currentPage)
+                this.Permissions = JSON.parse(sessionStorage.getItem(this.title));
+                this.getData(this.PageSize, this.currentPage);
+                this.Date = [new Date(), new Date()];
             }
         });
     </script>

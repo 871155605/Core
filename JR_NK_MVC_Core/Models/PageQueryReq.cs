@@ -15,5 +15,5 @@ namespace JR_NK_MVC_Core.Models
         /// 当前页
         /// </summary>
         public int CurrentPage { get; set; } = 1;
-    }
+}
 }

@@ -130,6 +130,36 @@
             <param name="expire">有效期</param>
             <returns></returns>
         </member>
+        <member name="T:JR_NK_MVC_Core.Common.Configuration.UploadOptions">
+            <summary>
+            上传文件配置类
+            </summary>
+        </member>
+        <member name="P:JR_NK_MVC_Core.Common.Configuration.UploadOptions.SaveType">
+            <summary>
+            存储类型
+            </summary>
+        </member>
+        <member name="P:JR_NK_MVC_Core.Common.Configuration.UploadOptions.Path">
+            <summary>
+            存储地址
+            </summary>
+        </member>
+        <member name="P:JR_NK_MVC_Core.Common.Configuration.UploadOptions.ImportPath">
+            <summary>
+            导入临时存储文件地址
+            </summary>
+        </member>
+        <member name="F:JR_NK_MVC_Core.Common.Configuration.SaveType.TerminalMemoryCache">
+            <summary>
+            终端缓存
+            </summary>
+        </member>
+        <member name="F:JR_NK_MVC_Core.Common.Configuration.SaveType.LoacalCache">
+            <summary>
+            本地缓存
+            </summary>
+        </member>
         <member name="T:JR_NK_MVC_Core.Common.Enum.AdminType">
             <summary>
             账号类型
@@ -1251,6 +1281,103 @@
             <param name="token"></param>
             <returns></returns>
         </member>
+        <member name="F:JR_NK_MVC_Core.Common.Until.DapperHelper._connection">
+            数据库连接名
+        </member>
+        <member name="P:JR_NK_MVC_Core.Common.Until.DapperHelper.Connection">
+            获取连接名        
+        </member>
+        <member name="F:JR_NK_MVC_Core.Common.Until.DapperHelper.dbConnection">
+            返回连接实例        
+        </member>
+        <member name="F:JR_NK_MVC_Core.Common.Until.DapperHelper.uniqueInstance">
+            静态变量保存类的实例        
+        </member>
+        <member name="F:JR_NK_MVC_Core.Common.Until.DapperHelper.locker">
+            定义一个标识确保线程同步        
+        </member>
+        <member name="M:JR_NK_MVC_Core.Common.Until.DapperHelper.#ctor(System.String)">
+            <summary>
+            私有构造方法，使外界不能创建该类的实例，以便实现单例模式
+            </summary>
+        </member>
+        <member name="M:JR_NK_MVC_Core.Common.Until.DapperHelper.GetInstance(System.String)">
+            <summary>
+            获取实例，这里为单例模式，保证只存在一个实例
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:JR_NK_MVC_Core.Common.Until.DapperHelper.OpenCurrentDbConnection">
+            <summary>
+            创建数据库连接对象并打开链接
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:JR_NK_MVC_Core.Common.Until.DapperSqlHelper.QueryFirstOrDefault``1(System.String,System.Object)">
+            <summary>
+            查出一条记录的实体
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="sql"></param>>
+            <returns></returns>
+        </member>
+        <member name="M:JR_NK_MVC_Core.Common.Until.DapperSqlHelper.Query``1(System.String,System.Object,System.Data.IDbTransaction,System.Boolean,System.Nullable{System.Int32},System.Nullable{System.Data.CommandType})">
+            <summary>
+            查出多条记录的实体泛型集合
+            </summary>
+            <typeparam name="T">泛型T</typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:JR_NK_MVC_Core.Common.Until.DapperSqlHelper.QueryMultiple(System.String,System.Object,System.Data.IDbTransaction,System.Nullable{System.Int32},System.Nullable{System.Data.CommandType})">
+            <summary>
+            同时查询多张表数据（高级查询）
+            "select *from K_City;select *from K_Area";
+            </summary>
+            <param name="sql"></param>
+            <returns></returns>
+        </member>
+        <member name="T:JR_NK_MVC_Core.Common.until.ExcelAttribute">
+            <summary>
+            excel转object
+            </summary>
+        </member>
+        <member name="M:JR_NK_MVC_Core.Common.until.ExcelHelper.ExcelToObject``1(System.String)">
+            <summary>
+            import file excel file to a IEnumerable of TModel
+            </summary>
+            <typeparam name="TModel"></typeparam>
+            <param name="path">excel full path</param>
+            <returns></returns>
+        </member>
+        <member name="M:JR_NK_MVC_Core.Common.until.ExcelHelper.ObjectToExcel``1(System.Collections.Generic.IEnumerable{``0},System.String)">
+            <summary>
+            Export object to excel file
+            </summary>
+            <typeparam name="TModel"></typeparam>
+            <param name="data">a IEnumerable of TModel</param>
+            <param name="path">excel full path</param>
+        </member>
+        <member name="M:JR_NK_MVC_Core.Controllers.AdminController.Login(JR_NK_MVC_Core.Models.LoginReq)">
+            <summary>
+            登录测试
+            </summary>
+            <param name="req"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JR_NK_MVC_Core.Controllers.AdminController.Test(JR_NK_MVC_Core.Models.SysUserReq)">
+            <summary>
+            测试查询
+            </summary>
+            <param name="req"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JR_NK_MVC_Core.Controllers.AdminController.Test1(JR_NK_MVC_Core.Models.SysUserReq)">
+            <summary>
+            测试查询1
+            </summary>
+            <param name="req"></param>
+            <returns></returns>
+        </member>
         <member name="M:JR_NK_MVC_Core.Controllers.JWTController.Test">
             <summary>
             测试获取令牌是否成功
@@ -1295,6 +1422,29 @@
             <param name="socketId"></param>
             <returns></returns>
         </member>
+        <member name="T:JR_NK_MVC_Core.Controllers.UpLoadController">
+            <summary>
+            上传文件控制类
+            </summary>
+        </member>
+        <member name="M:JR_NK_MVC_Core.Controllers.UpLoadController.OnPostUploadBachAsync">
+            <summary>
+            批量上传文件
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:JR_NK_MVC_Core.Controllers.UpLoadController.OnPostUploadAsync">
+            <summary>
+            上传文件
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:JR_NK_MVC_Core.Controllers.UpLoadController.ExtlToDataTable(System.String)">
+            <summary>
+            本地版测试只需传入本地文件路径
+            </summary>
+            <returns></returns>
+        </member>
         <member name="P:JR_NK_MVC_Core.Models.PageQueryReq.PageSize">
             <summary>
             每页显示数
@@ -1318,7 +1468,7 @@
             <param name="password"></param>
             <returns></returns>
         </member>
-        <member name="M:JR_NK_MVC_Core.Service.ISysAdminService.GetJwtTokenAsync(System.Collections.Generic.List{JR_NK_MVC_Core.Common.JWT.PermissionItem},System.String)">
+        <member name="M:JR_NK_MVC_Core.Service.ISysAdminService.GetJwtTokenAsync(System.Collections.Generic.List{System.String},System.String)">
             <summary>
             获取用户TOKEN
             </summary>
@@ -1326,9 +1476,9 @@
             <param name="uniqueName">账号</param>
             <returns></returns>
         </member>
-        <member name="M:JR_NK_MVC_Core.Service.ISysAdminService.LoadPermissionItemsAsync(JR_NK_MVC_Core.Entities.SysUser)">
+        <member name="M:JR_NK_MVC_Core.Service.ISysAdminService.LoadUserPermissionMenusAsync(System.String)">
             <summary>
-            加载所有权限
+            加载用户权限
             </summary>
             <param name="user"></param>
             <returns></returns>
@@ -1373,6 +1523,26 @@
             添加权限
             </summary>
             <param name="menu"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JR_NK_MVC_Core.Service.IUploadService.UploadAsync(Microsoft.AspNetCore.Http.IFormFileCollection)">
+            <summary>
+            批量上传文件
+            </summary>
+            <param name="files"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JR_NK_MVC_Core.Service.IUploadService.UploadAsync(Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            上传文件
+            </summary>
+            <param name="file"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JR_NK_MVC_Core.Startup.SetPermissionRequirement">
+            <summary>
+            权限配置
+            </summary>
             <returns></returns>
         </member>
     </members>

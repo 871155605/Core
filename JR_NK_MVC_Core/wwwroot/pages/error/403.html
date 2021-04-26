@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>权限不足</title>
+    <script src="../../common/vue/vue.js"></script>
+    <script src="../../common/axios/axios.min.js"></script>
+    <script src="../../common/jquery/jquery-3.0.0.min.js"></script>
+    <link rel="stylesheet" href="../../common/element/index.css">
+    <script src="../../common/element/index.js"></script>
+</head>
+<body>
+    <div id="app" style="text-align:center">
+        <div class="el-upload__tip" slot="tip" style="font-size:20px">权限不足，造成此原因可能是:</div>
+        <div class="el-upload__tip" slot="tip" style="font-size:20px">1:您没有访问权限</div>
+        <div class="el-upload__tip" slot="tip" style="font-size:20px">2:长时间未操作令牌过期，需要重新登录</div>
+        <div class="el-upload__tip" slot="tip" style="font-size:20px">3:请联系管理员</div>
+        <!--<el-button style="margin-top: 20px;font-size:20px" size="small" type="success" @click="refresh">刷新</el-button>-->
+    </div>
+    <script>
+        var Main = {
+            data() {
+                return {
+                };
+            },
+            methods: {
+                refresh() {
+                    top.location.reload();
+                }
+            },
+            created: function () {
+               
+            }
+        }
+        var Ctor = Vue.extend(Main);
+        new Ctor().$mount('#app');
+    </script>
+</body>
+</html>

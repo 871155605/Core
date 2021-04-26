@@ -1,7 +1,9 @@
 using JR_NK_MVC_Core.Common.Cache;
+using JR_NK_MVC_Core.Common.Configuration;
 using JR_NK_MVC_Core.Common.JWT;
 using JR_NK_MVC_Core.Common.Logger;
 using JR_NK_MVC_Core.Common.Socket;
+using JR_NK_MVC_Core.Common.Until;
 using JR_NK_MVC_Core.Entities;
 using JR_NK_MVC_Core.Service;
 using JR_NK_MVC_Core.Service.Impl;
@@ -53,11 +55,13 @@ namespace JR_NK_MVC_Core
             #region 注册配置信息
             services.AddOptions();
             services.Configure<CacheOptions>(Configuration.GetSection("Cache"));
+            services.Configure<UploadOptions>(Configuration.GetSection("UpLoad"));
             //读取JWR配置并构建PermissionRequirement
             PermissionRequirement permissionRequirement =  SetPermissionRequirement();
             services.AddDbContext<JRDBContext>(options =>
             {
-                options.UseLoggerFactory(sqlLogger).UseSqlServer(Configuration["SqlServerconStr"]);
+                options.UseSqlServer(Configuration["SqlServerconStr"]);//.UseLoggerFactory(sqlLogger)开启EFCORE-SQL日志
+                DapperSqlHelper.ConnectionStr = Configuration["SqlServerconStr"];
             });
             #endregion
             #region 注册服务
@@ -65,6 +69,7 @@ namespace JR_NK_MVC_Core
             //services.AddSingleton<ICache, RedisCache>();
             services.AddSingleton<ICache, DictionaryCache>();
             services.AddScoped<ISysAdminService,SysAdminServiceImpl>();
+            services.AddScoped<IUploadService, UploadServiceImpl>();
             #endregion
             #region swagger
             services.AddSwaggerGen(c =>
@@ -125,23 +130,27 @@ namespace JR_NK_MVC_Core
             //app.UseMiddleware<WebSocketManagerMiddleware>();
             #endregion
 
-            #region 错误代码跳转页面配置
-            app.UseStatusCodePages(async context =>
+            #region 错误代码跳转页面配置 改为前端处理
+            /*app.UseStatusCodePages(async context =>
             {
                 var request = context.HttpContext.Request;
                 var response = context.HttpContext.Response;
                 //401
-                if (response.StatusCode == (int)HttpStatusCode.Unauthorized) response.Redirect("/jwt/denied");
+                if (response.StatusCode == (int)HttpStatusCode.Unauthorized) response.Redirect("/pages/home/login.html");
+                //403
+                if (response.StatusCode == (int)HttpStatusCode.Forbidden) response.Redirect("/jwt/Denied");
                 //404
                 if (response.StatusCode == (int)HttpStatusCode.NotFound) response.Redirect("/jwt/notFoundPage");
                 //500
                 if (response.StatusCode == (int)HttpStatusCode.NotFound) response.Redirect("/jwt/errorPage");
-            });
+            });*/
             #endregion
+
             app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+
             #region 配置路由
             app.UseEndpoints(endpoints =>
             {
@@ -150,6 +159,10 @@ namespace JR_NK_MVC_Core
             #endregion
         }
 
+        /// <summary>
+        /// 权限配置
+        /// </summary>
+        /// <returns></returns>
         private PermissionRequirement SetPermissionRequirement() {
             JWTConfig config = Configuration.GetSection("JwtSetting").Get<JWTConfig>();
             PermissionRequirement.DeniedAction = config.DeniedAction;

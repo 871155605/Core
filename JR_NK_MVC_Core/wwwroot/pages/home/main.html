@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<style type="text/css">
+		p.tip span {
+			font-weight: bold;
+			color: #cf3b5c;
+		}
+	</style>
+	<meta charset="utf-8" />
+	<script src="../../common/vue/vue.js"></script>
+	<script src="../../common/axios/axios.min.js"></script>
+	<script src="../../common/jquery/jquery-3.0.0.min.js"></script>
+	<link rel="stylesheet" href="../../common/element/index.css">
+	<script src="../../common/element/index.js"></script>
+	<script src="../../js/error.js"></script>
+</head>
+<body>
+	<div id="app">
+		<el-container class="home-container">
+			<el-header style="background-color:dodgerblue">
+				<h1>顶部</h1>
+			</el-header>
+			<div style="height:5px;background-color:white"></div>
+			<el-container>
+				<el-aside :width="isCollapse?'64px':'200px'">
+					<el-menu background-color="#42485B" text-color="#fff" active-text-color="#ffd04b"
+							 :collapse="isCollapse" :collapse-transition="false" :router="false"
+							 :default-active="activePath" :unique-opened="true">
+						<template v-for="item in menulist">
+							<el-submenu v-if="item.children && item.children.length" :index="'/'+item.path" :key="item.path">
+								<template slot="title">
+									<i :class="item.iconCls"></i>
+									<span>{{item.name}}</span>
+								</template>
+								<!--二级菜单-->
+								<template v-for="itemChild in item.children">
+									<el-submenu v-if="itemChild.children && itemChild.children.length" :index="'/'+itemChild.path" :key="itemChild.path">
+										<template slot="title">
+											<i :class="itemChild.iconCls"></i>
+											<span>{{itemChild.name}}</span>
+										</template>
+										<!--三级菜单-->
+										<el-menu-item v-for="itemChild_child in itemChild.children" :index="'/'+itemChild_child.path" :key="itemChild_child.path" @click="openPage(itemChild_child)">
+											<span slot="title">{{itemChild_child.name}}</span>
+										</el-menu-item>
+									</el-submenu>
+									<el-menu-item v-else :index="itemChild.path" :key="itemChild.path" @click="openPage(itemChild)">{{itemChild.name}}</el-menu-item>
+								</template>
+							</el-submenu>
+							<el-menu-item v-else :index="item.path" :key="item.path" @click="openPage(item)">
+								<i :class="item.iconCls"></i>
+								<span slot="title">{{item.name}}</span>
+							</el-menu-item>
+						</template>
+					</el-menu>
+				</el-aside>
+				<el-container>
+					<div class="main-content">
+						<iframe :src="activePath" style="width: 1700px; height: 850px;overflow: hidden; border:none;"></iframe>
+					</div>
+				</el-container>
+			</el-container>
+		</el-container>
+	</div>
+	<script>
+		// 该vue对象，绑定了页面中id是app的那个div
+		new Vue({
+			el: '#app', //element
+			data: {
+				//左侧菜单数据
+				menulist: [],
+				//是否折叠
+				isCollapse: false,
+				//被激活的链接地址
+                activePath: ''
+			},
+			methods: {
+				openPage(it) {
+					this.activePath = it.path;
+					console.log(this.activePath);
+                    console.log(it.name);
+					console.log(it.button);
+                    sessionStorage.setItem(it.code, JSON.stringify(it.button));
+				}
+			},
+			created: function () {
+				this.menulist = JSON.parse(sessionStorage.getItem("PermissionMenus"));
+            }
+		});
+	</script>
+</body>
+</html>

@@ -27,14 +27,14 @@ namespace JR_NK_MVC_Core.Service
         /// <param name="permissions"></param>
         /// <param name="uniqueName">账号</param>
         /// <returns></returns>
-        public Task<string> GetJwtTokenAsync(List<PermissionItem> permissions,string uniqueName);
+        public Task<string> GetJwtTokenAsync(List<string> permissions,string uniqueName);
 
         /// <summary>
-        /// 加载所有权限
+        /// 加载用户权限
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public Task<List<PermissionItem>> LoadPermissionItemsAsync(SysUser user);
+        public Task<Dictionary<string, Object>> LoadUserPermissionMenusAsync(string account);
 
         /// <summary>
         /// 加载所有用户

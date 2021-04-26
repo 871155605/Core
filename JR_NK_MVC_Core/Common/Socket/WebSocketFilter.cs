@@ -25,7 +25,6 @@ namespace JR_NK_MVC_Core.Common.Socket
             try
             {
                 await next();
-                //Console.WriteLine("WebSocketFilter-OnActionExecutionAsync-in");
                 HttpContext httpContext = context.HttpContext;
                 if (httpContext.WebSockets.IsWebSocketRequest)
                 {
@@ -37,12 +36,10 @@ namespace JR_NK_MVC_Core.Common.Socket
                             break;
                     }
                 }
-                //Console.WriteLine("WebSocketFilter-OnActionExecutionAsync-end");
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace.ToString());
-                Console.WriteLine(e.Message);
+                _logger.Error(typeof(WebSocketFilter),$"StackTrace:{e.StackTrace} Message:{e.Message}");
             }
         }
     }

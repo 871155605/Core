@@ -1,0 +1,107 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <script src="../../common/vue/vue.js"></script>
+    <script src="../../common/axios/axios.min.js"></script>
+    <script src="../../common/jquery/jquery-3.0.0.min.js"></script>
+    <link rel="stylesheet" href="../../common/element/index.css">
+    <script src="../../common/element/index.js"></script>
+    <script src="../../js/error.js"></script>
+</head>
+<body>
+    <div id="app" style="text-align:center">
+        <el-upload class="upload-demo"
+                   ref="upload"
+                   action="/upLoad/onPostUpload"
+                   :headers="headers"
+                   :multiple="true"
+                   :data="extraData"
+                   :on-preview="handlePreview"
+                   :on-error="handleError"
+                   :on-progress="handleProgress"
+                   :on-remove="handleRemove"
+                   :before-remove="beforeRemove"
+                   :before-upload="beforeUpload"
+                   :on-success="handleSuccess"
+                   :on-exceed="handleExceed"
+                   :file-list="fileList"
+                   :drag="true"
+                   :limit="limit"
+                   :auto-upload="false">
+            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+            <div class="el-upload__tip" slot="tip">{{tip}}</div>
+            <!--<el-button slot="trigger" style="margin-top: 20px;" size="small" type="primary">选取文件</el-button>-->
+        </el-upload>
+        <el-button style="margin-top: 20px;" size="small" type="success" @click="submitUpload">上传</el-button>
+    </div>
+    <script>
+        var Main = {
+            data() {
+                return {
+                    fileList: [],
+                    extraData: {},
+                    orderType:"",
+                    tip: "",
+                    limit: 5,
+                    size: 10,
+                    headers: {}
+                };
+            },
+            methods: {
+                submitUpload() {//点击提交
+                    this.$refs.upload.submit();
+                },
+                handleRemove(file, fileList) {//删除文件列表的文件时的钩子
+                    console.log(file);
+                },
+                beforeRemove(file, fileList) {//删除之前
+                    //return this.$confirm(`确定移除 ${file.name}?`);
+                },
+                handlePreview(file) {//点击文件列表中的文件时的钩子
+                    console.log(file);
+                },
+                handleProgress() {//文件上传时的钩子
+                    
+                },
+                handleSuccess(response, file, fileList) {//文件上传成功时的钩子
+                    this.$message.success(`${file.name}  ${response.message}`);
+                },
+                handleError(response, file, fileList) {//文件上传失败时的钩子
+                    this.$message.error(`${file.name} ${response.message}`);
+                },
+                handleExceed(files, fileList) {//文件超出个数限制时的钩子
+                    this.$message.warning(`当前限制选择${this.limit}个文件，本次选择了${files.length}个文件，共选择了${files.length + fileList.length}个文件`);
+                },
+                beforeUpload(file) {//上传之前执行
+                    var size = parseFloat((file.size / 1024 /1024).toFixed(2));
+                    if (size > this.size) {
+                        this.$message.error(`${file.name} 文件大小为${size}M超出了大小限制，最大为10M`);
+                        return false;
+                    }
+                    var array = file.name.split(".");
+                    if (array.length == 2) {
+                        var suffix = array[1].toLocaleLowerCase();
+                        if (suffix === 'xls' || suffix === 'xlsx') {
+                            return true;
+                        } else {
+                            this.$message.error(`${file.name}格式有误，只允许上传xls、xlsx的文件`);
+                            return false;
+                        }
+                    } else {
+                        this.$message.error(`${file.name} 文件格式错误`);
+                        return false;
+                    }
+                }
+            },
+            created: function () {//可以在页面跳转时传入值来达到动态提示的目的
+                this.tip = "只能上传xls、xlsx的文件，并且单个文件大小上限为10M，单次上传数量为5";
+                this.orderType = "单据类型";
+                this.headers == { 'Authorization': "TOKEN" };
+            }
+        }
+        var Ctor = Vue.extend(Main);
+        new Ctor().$mount('#app');
+    </script>
+</body>
+</html>

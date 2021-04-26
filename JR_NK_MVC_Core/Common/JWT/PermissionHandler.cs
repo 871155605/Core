@@ -44,7 +44,7 @@ namespace JR_NK_MVC_Core.Common.JWT
             string questUrl = httpContext.Request.Path.Value.ToLower();
             //获取token
             httpContext.Request.Headers.TryGetValue("Authorization",out StringValues token);
-            _logger.Info(typeof(PermissionHandler), questUrl);
+            //_logger.Info(typeof(PermissionHandler), questUrl);
             //判断请求是否停止
             var handlers = httpContext.RequestServices.GetRequiredService<IAuthenticationHandlerProvider>();
             foreach (var scheme in await _schemes.GetRequestHandlerSchemesAsync())
@@ -77,19 +77,19 @@ namespace JR_NK_MVC_Core.Common.JWT
                     #endregion*/
                     #region 校验TOKEN是否过期(自定义版)
                     var account = httpContext.User.Claims.SingleOrDefault(s => s.Type == ClaimTypes.Name)?.Value;
-                    Console.WriteLine(account);
+                    //Console.WriteLine(account);
                     if (account.IsNullOrEmpty()) {
                         context.Fail();
                         return;
                     }
                     long expiredSecond = _cache.Get<long>(account);
-                    Console.WriteLine($"TOKEN过期时间:{expiredSecond}");
+                    //Console.WriteLine($"TOKEN过期时间:{expiredSecond}");
                     long nowSecond = (long)new TimeSpan(DateTime.UtcNow.Ticks).TotalSeconds;
-                    Console.WriteLine($"调用接口时间:{nowSecond}");
+                    //Console.WriteLine($"调用接口时间:{nowSecond}");
                     if (nowSecond <= expiredSecond)
                     {
                         expiredSecond = (long)(nowSecond + PermissionRequirement.Expiration.TotalSeconds);
-                        Console.WriteLine($"刷新TOKEN过期时间:{expiredSecond}");
+                        //Console.WriteLine($"刷新TOKEN过期时间:{expiredSecond}");
                         _cache.Set(account, expiredSecond);
                     }
                     else

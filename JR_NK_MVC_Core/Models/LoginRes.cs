@@ -10,7 +10,7 @@ namespace JR_NK_MVC_Core.Models
     public class LoginRes
     {
         public SysUser User { get; set; }
-        public List<PermissionItem> PermissionItems { get; set; }
+        public List<PermissionMenu> PermissionMenuList { get; set; }
         public object TokenJson { get; set; }
     }
 }

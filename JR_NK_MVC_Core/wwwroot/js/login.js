@@ -2,8 +2,8 @@ var loginVue = new Vue({
     el: '#loginDiv',
     data: {
         loginType: 'user_password_realm',
-        username: '',
-        password: '',
+        username: 'string',
+        password: 'string',
         phoneNumber: '',
         checkCode: '',
         isThirdPartLogin: false,
@@ -42,15 +42,13 @@ var loginVue = new Vue({
             //var salt = "bsmg";//使用固定的salt
             //var password = JSON.parse(JSON.stringify(this.password));//深克隆获得用户输入的密码，用于加密
             //this.password = md5(salt.charAt(3) + salt.charAt(2) + password + salt.charAt(0) + salt.charAt(1));
-            axios.post('/home/login', this.$data).then(response => {
+            axios.post('/admin/login', this.$data).then(response => {
                 //password = "";
-                console.log(response.data.code);
-                console.log(response.data.data);
-                console.log(response.data.message);
                 if (response.data.code === 1) {
                     //JSON.stringify将JSON对象转换为字符串 因为sessionStorage.setItem只支持存储字符串格式
-                    sessionStorage.setItem("user", JSON.stringify(response.data.data));
-                    //window.location.href = "/pages/home/home.html";
+                    sessionStorage.setItem("Authorization", JSON.stringify(response.data.data.tokenJson));
+                    sessionStorage.setItem("PermissionMenus", JSON.stringify(response.data.data.permissionMenuList));
+                    window.location.href = "main.html";
                 } else {
                     this.responseMsg = response.data.message;
                 }

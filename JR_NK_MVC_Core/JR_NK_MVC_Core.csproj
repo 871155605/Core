@@ -16,7 +16,9 @@
   <ItemGroup>
     <Folder Include="Entities\" />
     <Folder Include="wwwroot\css\" />
+    <Folder Include="wwwroot\js\vue\" />
     <Folder Include="wwwroot\lib\" />
+    <Folder Include="wwwroot\pages\layout\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Chsword.Excel2Object" Version="2.0.0.143" />
     <PackageReference Include="CSRedisCore" Version="3.6.6" />
     <PackageReference Include="Dapper" Version="2.0.78" />
     <PackageReference Include="Furion" Version="1.18.4" />
@@ -42,6 +45,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="5.0.0" />
+    <PackageReference Include="NPOI" Version="2.5.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.1" />
     <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="7.0.2" />
   </ItemGroup>

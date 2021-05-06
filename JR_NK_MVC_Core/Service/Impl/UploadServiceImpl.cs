@@ -21,6 +21,7 @@ namespace JR_NK_MVC_Core.Service.Impl
             _path = oUploadOptions.Value.Path;
         }
 
+        //有BUG
         public async Task<List<string>> UploadAsync(IFormFileCollection files)
         {
             List<string> filePaths = new List<string>();
@@ -29,7 +30,7 @@ namespace JR_NK_MVC_Core.Service.Impl
             {
                 string filePath = await UploadAsync(file);
                 filePaths.Add(filePath);
-                var stream = System.IO.File.Create(filePath);
+                using (var stream = System.IO.File.Create(filePath))
                 await file.CopyToAsync(stream);
             }
             return filePaths;
@@ -40,7 +41,7 @@ namespace JR_NK_MVC_Core.Service.Impl
             //string suffix = file.FileName.Split(".")[1];//获取后缀名
             if (file == null) throw new Exception("FILE IS NULL");
             var filePath = $"{_path}{DateTime.Now.Ticks}-{file.FileName}";
-            var stream = System.IO.File.Create(filePath);
+            using (var stream = System.IO.File.Create(filePath))
             await file.CopyToAsync(stream);
             return file.FileName;
         }

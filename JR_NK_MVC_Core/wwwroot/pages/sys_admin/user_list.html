@@ -11,33 +11,34 @@
 </head>
 <body>
     <div id="app">
+        <div>
+            <!--<el-button @click="openEdit('add')" type="success" icon="el-icon-plus" size="small" v-if="buttonVisible.add">新增</el-button>
+            <el-button @click="openEdit('update')" type="warning" icon="el-icon-edit" size="small" v-if="buttonVisible.update">修改</el-button>-->
+            <el-popconfirm  confirm-button-text='确定'
+                            cancel-button-text='取消'
+                            icon="el-icon-delete"
+                            icon-color="red"
+                            @confirm="handleDeleteConfirm()"
+                            @cancel=""
+                            title="确定删除吗？"
+                            width="200">
+                <el-button icon="el-icon-delete" type="danger" size="small" slot="reference" v-if="buttonVisible.delete">批量删除</el-button>
+            </el-popconfirm>
+        </div>
         <template>
             <div>
-                <table>
-                    <tr>
-                        <td>
-                            <div class="block">
-                                <el-date-picker v-model="Date"
-                                                type="datetimerange"
-                                                range-separator="至"
-                                                start-placeholder="开始时间"
-                                                end-placeholder="结束时间"
-                                                align="right">
-                                </el-date-picker>
-                            </div>
-                        </td>
-                        <td>
-                            <el-radio v-model="Status" label="1">启用</el-radio>
-                            <el-radio v-model="Status" label="2">禁用</el-radio>
-                        </td>
-                    </tr>
-                    <tr>
-                    </tr>
-                </table>
-            </div>
-            <div>
-                <el-table :data="tableData"
-                          style="width: 100%">
+                <el-table ref="multipleTable"
+                          :data="tableData"
+                          style="width: 100%"
+                          height="770"
+                          @selection-change="getSelected"
+                          @row-click="click">
+                    <el-table-column type="selection">
+                    </el-table-column>
+                    <el-table-column type="index"
+                                     label="序号"
+                                     :index="indexMethod">
+                    </el-table-column>
                     <el-table-column prop="account"
                                      label="账号"
                                      width="100px">
@@ -51,12 +52,11 @@
                     </el-table-column>
                     <el-table-column fixed="right"
                                      label="操作"
-                                     width="150px">
+                                     width="200">
                         <template slot-scope="scope">
-                            <el-button @click="" type="text" size="small" v-if="checkPermsission('Query')">查看</el-button>
-                            <el-button @click="" type="text" size="small" v-if="checkPermsission('Add')">增加</el-button>
-                            <el-button @click="" type="text" size="small" v-if="checkPermsission('Update')">编辑</el-button>
-                            <el-button @click="" type="text" size="small" v-if="checkPermsission('Delete')">删除</el-button>
+                            <el-button @click="openEdit('query',scope.row)"  type="primary" icon="el-icon-search" size="small">查看</el-button>
+                            <el-button @click="openEdit('update',scope.row)" type="warning" icon="el-icon-edit" size="small" v-if="buttonVisible.update">修改</el-button>
+                            <el-button @click="delete(scope.$index, tableData)" type="danger" icon="el-icon-delete" size="small" v-if="buttonVisible.delete">删除</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -64,11 +64,31 @@
             <div>
                 <el-pagination @size-change="handleSizeChange"
                                @current-change="handleCurrentChange"
-                               :current-page="currentPage"
+                               :current-page="queryReq.currentPage"
                                :page-sizes="pageSizes"
-                               :page-size="PageSize" layout="total, sizes, prev, pager, next, jumper"
+                               :page-size="queryReq.pageSize" layout="total, sizes, prev, pager, next, jumper"
                                :total="totalCount">
                 </el-pagination>
+            </div>
+            <!--编辑页面-->
+            <div>
+                <el-dialog :title="form.formTitle" :visible.sync="formVisible" :center="true">
+                    <el-form :model="form">
+                        <el-form-item label="账号" :label-width="formLabelWidth">
+                            <el-input v-model="form.account" autocomplete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="昵称" :label-width="formLabelWidth">
+                            <el-input v-model="form.nickName" autocomplete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="姓名" :label-width="formLabelWidth">
+                            <el-input v-model="form.name" autocomplete="off"></el-input>
+                        </el-form-item>
+                    </el-form>
+                    <div slot="footer" class="dialog-footer">
+                        <el-button @click="formVisible = false">取 消</el-button>
+                        <el-button type="primary" @click="formVisible = false">确 定</el-button>
+                    </div>
+                </el-dialog>
             </div>
         </template>
     </div>
@@ -77,23 +97,32 @@
         new Vue({
             el: "#app",
             data: {
-                title:'AdminUser',
+                queryReq: {
+                    currentPage: 1,
+                    pageSize: 15
+                },
+                title: 'adminUser',
                 tableData: [],
-                currentPage: 1,
-                totalCount: 1,
-                pageSizes: [5, 10, 20, 30,40,50],
-                PageSize: 10,
-                SysUserReq: {},
-                Date: [],
-                Status: '1',
-                Permissions:[]
+                totalCount: 0,
+                pageSizes: [15, 20, 30, 40, 50],
+                permissions: [],
+                formVisible: false,
+                form: {},
+                formLabelWidth: '120px',
+                checkedRows: [],
+                buttonVisible: {
+                    add: false,
+                    update: false,
+                    delete: false
+                },
             },
             methods: {
                 getData: function (n1, n2) {
-                    this.SysUserReq = { orgCode: 1, PageSize: n1, currentPage: n2, };
-                    axios.post('/admin/user', this.$data).then(response => {
+                    this.queryReq.pageSize = n1;
+                    this.queryReq.currentPage = n2;
+                    axios.post('/admin/user', this.$data.queryReq).then(response => {
                         if (response.data.code === 1) {
-                            console.log(response.data.data);
+                            //console.log(response.data.data);
                             this.tableData = response.data.data.tableData;
                             this.totalCount = response.data.data.totalCount;
                         } else {
@@ -103,35 +132,84 @@
                         redirect(error);
                     });
                 },
+                openEdit(operation,row) {
+                    if (operation != 'add' && (this.checkedRows == null || this.checkedRows.length == 0)) {
+                        this.$message({ message: '请勾选需要操作的数据行', type: 'error' });
+                        return;
+                    }
+                    switch (operation) {
+                        case 'query':
+                            this.form = row;
+                            this.form.formTitle = '查看';
+                            this.formVisible = true;
+                            break;
+                        case 'add':
+                            this.form = {};
+                            this.form.formTitle = '新增';
+                            this.formVisible = true;
+                            break;
+                        case 'update':
+                            this.form = row;
+                            this.form.formTitle = '修改';
+                            this.formVisible = true;
+                            break;
+                    }
+                },
+                delete(row) {
+
+                },
+                handleDeleteConfirm() {
+                    console.log('执行删除逻辑');
+                },
                 // 每页显示的条数
-                handleSizeChange:function(val) {
-                    // 改变每页显示的条数 
-                    this.PageSize = val;
+                handleSizeChange: function (val) {
+                    // 改变每页显示的条数
+                    this.queryReq.pageSize = val;
                     // 点击每页显示的条数时，显示第一页
                     this.getData(val, 1);
                     // 注意：在改变每页显示的条数时，要将页码显示到第一页
-                    this.currentPage = 1;
+                    this.queryReq.currentPage = 1;
                 },
                 // 显示第几页
-                handleCurrentChange:function(val) {
+                handleCurrentChange: function (val) {
                     // 改变默认的页数
-                    this.currentPage = val;
+                    this.queryReq.currentPage = val;
                     // 切换页码时，要获取每页显示的条数
-                    this.getData(this.PageSize, (val) * (this.pageSize));
+                    this.getData(this.queryReq.pageSize, this.queryReq.currentPage);
+                }, 
+                indexMethod(index) {//生成索引
+                    return index + 1;
                 },
-                checkPermsission(button_name) {
-                    for (var i = 0; i < this.Permissions.length; i++) {
-                        //console.log((this.title + button_name).toLowerCase());
-                        //console.log(this.Permissions[i].toLowerCase());
-                        if (this.Permissions[i].toLowerCase() === (this.title + button_name).toLowerCase()) return true;
+                getSelected(selection, row) {//获取多选内容
+                    this.checkedRows = selection;
+                },
+                click(row, column, event) {//鼠标单击事件
+                    let index = this.checkedRows.findIndex(item => {//判断已选数组中是否已存在该条数据
+                        return item.id == row.id;
+                    })
+                    if (index == -1) {//如果未存在，设置已选状态，并在checkedRows中添加这条数据
+                        this.$refs.multipleTable.toggleRowSelection(row, true); //设置复选框为选中状态
+                        this.checkedRows.push(row);
+                    } else {//如果已存在，设置未选状态，并在checkedRows中删除这条数据
+                        this.$refs.multipleTable.toggleRowSelection(row, false); //设置复选框为未选状态
+                        this.checkedRows.splice(index, 1);
                     }
-                    return (false);
-                }
+                },
             },
             created: function () {
-                this.Permissions = JSON.parse(sessionStorage.getItem(this.title));
-                this.getData(this.PageSize, this.currentPage);
-                this.Date = [new Date(), new Date()];
+                //权限校验
+                this.permissions = JSON.parse(sessionStorage.getItem(this.title.toLowerCase()));
+                if (this.permissions == null) top.location.href = "../home/login.html";
+                var buttons = Object.keys(this.buttonVisible);
+                for (var p = 0; p < this.permissions.length; p++) {
+                    for (var b = 0; b < buttons.length; b++) {
+                        if (this.permissions[p].toLowerCase() === (this.title + buttons[b]).toLowerCase()) {
+                            this.buttonVisible[buttons[b]] = true;
+                        }
+                    }
+                }
+                //加载数据
+                this.getData(this.queryReq.pageSize, this.queryReq.currentPage);
             }
         });
     </script>

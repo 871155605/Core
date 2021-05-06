@@ -1,4 +1,5 @@
-﻿using JR_NK_MVC_Core.Common.JWT;
+﻿using JR_NK_MVC_Core.Common.Cache;
+using JR_NK_MVC_Core.Common.JWT;
 using JR_NK_MVC_Core.Common.Logger;
 using JR_NK_MVC_Core.Entities;
 using JR_NK_MVC_Core.Models;
@@ -18,10 +19,12 @@ namespace JR_NK_MVC_Core.Controllers
     {
         private readonly ISysAdminService _adminService;
         private readonly ILoggerHelper _logger;
-        public AdminController(ISysAdminService adminService, ILoggerHelper logger)
+        private readonly ICache _cache;
+        public AdminController(ISysAdminService adminService, ILoggerHelper logger, ICache cache)
         {
             _adminService = adminService;
             _logger = logger;
+            _cache = cache;
         }
 
         /// <summary>
@@ -37,12 +40,15 @@ namespace JR_NK_MVC_Core.Controllers
             {
                 SysUser user = await _adminService.LoadUserAsync(req.Username, req.Password);
                 if (user == null) return GlobalResponse.Of(-1000, "账号密码错误");
-                Dictionary<string, Object> keyValues = await _adminService.LoadUserPermissionMenusAsync(req.Username);
+                Dictionary<string, Object> keyValues = _cache.Get<Dictionary<string, Object>>($"{ req.Username}-permission-menu");
+                if (keyValues == null) keyValues = await _adminService.LoadUserPermissionMenusAsync(req.Username);
                 keyValues.TryGetValue("permissions",out object permissionStringList);
-                keyValues.TryGetValue("menus",out object permissionMenuList);
                 if (permissionStringList == null) return GlobalResponse.Of(-1, "权限加载失败");
+                keyValues.TryGetValue("menus", out object permissionMenuList);
                 if (permissionMenuList == null) return GlobalResponse.Of(-1, "权限菜单加载失败");
+                _cache.Set($"{ req.Username}-permission-menu", keyValues);
                 var tokenJson = await _adminService.GetJwtTokenAsync((List<string>)permissionStringList, req.Username);
+                if (tokenJson == null) return GlobalResponse.Of(-1, "获取TOKEN失败");
                 return GlobalResponse.Of(new LoginRes { User = user, PermissionMenuList = (List<PermissionMenu>)permissionMenuList, TokenJson = tokenJson });
             }
             catch (Exception e)

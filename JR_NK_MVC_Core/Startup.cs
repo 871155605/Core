@@ -56,7 +56,7 @@ namespace JR_NK_MVC_Core
             services.AddOptions();
             services.Configure<CacheOptions>(Configuration.GetSection("Cache"));
             services.Configure<UploadOptions>(Configuration.GetSection("UpLoad"));
-            //读取JWR配置并构建PermissionRequirement
+            //读取JWT配置并构建PermissionRequirement
             PermissionRequirement permissionRequirement =  SetPermissionRequirement();
             services.AddDbContext<JRDBContext>(options =>
             {

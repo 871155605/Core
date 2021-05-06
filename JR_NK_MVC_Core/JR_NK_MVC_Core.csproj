@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>dc2934d5-85ae-4ba0-8c90-128a8e466635</UserSecretsId>
+    <ApplicationIcon>favicon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -16,7 +17,6 @@
   <ItemGroup>
     <Folder Include="Entities\" />
     <Folder Include="wwwroot\css\" />
-    <Folder Include="wwwroot\js\vue\" />
     <Folder Include="wwwroot\lib\" />
     <Folder Include="wwwroot\pages\layout\" />
   </ItemGroup>

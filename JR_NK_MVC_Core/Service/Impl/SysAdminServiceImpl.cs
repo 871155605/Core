@@ -32,15 +32,11 @@ namespace JR_NK_MVC_Core.Service.Impl
         {
             List<SysUser> users = await _dbcontext.SysUsers.Where(_ => _.Account == account && _.Password == password).ToListAsync();
             SysUser user = null;
-            if (users != null && users.Count > 0)
-            {
-                user = users[0];
-                _cache.Set(user.Account, user);
-                _logger.Info(typeof(SysAdminServiceImpl), $"ADD USER TO CACHE.USERID:{user.Account}");
-            }
-            //SysUser user = await DapperSqlHelper.QueryFirstOrDefaultAsync<SysUser>($"SELECT * FROM sys_user WHERE Account = '{account}' And Password = '{password}';");
+            if (users != null && users.Count > 0) user = users[0];
+            _logger.Info(typeof(SysAdminServiceImpl), $"USER LOGIN USERACCOUNT:{user.Account}");
             return user;
         }
+
         public async Task<Dictionary<string,Object>> LoadUserPermissionMenusAsync(string account) {
             Dictionary<string, Object> keyValues = new Dictionary<string, object>();
             List<string> permissionStringList = new List<string>();
@@ -143,9 +139,9 @@ namespace JR_NK_MVC_Core.Service.Impl
                 var encodedJwt = "Bearer " + new JwtSecurityTokenHandler().WriteToken(jwt);
                 #region 自定义校验token时间时使用
                 long nowSecond = (long)new TimeSpan(DateTime.UtcNow.Ticks).TotalSeconds;
-                Console.WriteLine($"登录时间:{nowSecond}");
+                //Console.WriteLine($"登录时间:{nowSecond}");
                 long expiredSecond = (long)(nowSecond + PermissionRequirement.Expiration.TotalSeconds);
-                Console.WriteLine($"TOKEN过期时间:{expiredSecond}");
+                //Console.WriteLine($"TOKEN过期时间:{expiredSecond}");
                 _cache.Set(uniqueName, expiredSecond);
                 #endregion
                 return encodedJwt;

@@ -79,14 +79,15 @@
 			methods: {
 				openPage(it) {
 					this.activePath = it.path;
-					console.log(this.activePath);
-                    console.log(it.name);
-					console.log(it.button);
-                    sessionStorage.setItem(it.code, JSON.stringify(it.button));
+					//console.log(this.activePath);
+                    //console.log(it.name);
+					//console.log(it.button);
+                    sessionStorage.setItem(it.code.toLowerCase(), JSON.stringify(it.button));
 				}
 			},
 			created: function () {
 				this.menulist = JSON.parse(sessionStorage.getItem("PermissionMenus"));
+                if (this.menulist == null) top.location.href = "../home/login.html";
             }
 		});
 	</script>

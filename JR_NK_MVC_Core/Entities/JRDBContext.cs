@@ -1,9 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Console;
-using Microsoft.Extensions.Logging.Debug;
 
 #nullable disable
 
@@ -11,7 +8,6 @@ namespace JR_NK_MVC_Core.Entities
 {
     public partial class JRDBContext : DbContext
     {
-
         public JRDBContext()
         {
         }
@@ -21,27 +17,23 @@ namespace JR_NK_MVC_Core.Entities
         {
         }
 
-        public virtual DbSet<SysMenu> SysMenus { get; set; }
-        public virtual DbSet<SysRole> SysRoles { get; set; }
-        public virtual DbSet<SysRoleMenu> SysRoleMenus { get; set; }
-        public virtual DbSet<SysUser> SysUsers { get; set; }
-        public virtual DbSet<SysUserRole> SysUserRoles { get; set; }
+        public virtual DbSet<AdminMenu> AdminMenus { get; set; }
+        public virtual DbSet<AdminRole> AdminRoles { get; set; }
+        public virtual DbSet<AdminRoleMenu> AdminRoleMenus { get; set; }
+        public virtual DbSet<AdminUser> AdminUsers { get; set; }
+        public virtual DbSet<AdminUserRole> AdminUserRoles { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-        }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder){}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:Collation", "Chinese_PRC_CI_AS");
 
-            modelBuilder.Entity<SysMenu>(entity =>
+            modelBuilder.Entity<AdminMenu>(entity =>
             {
-                entity.ToTable("sys_menu");
+                entity.ToTable("admin_menu");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("ID");
+                entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Code)
                     .HasMaxLength(64)
@@ -56,7 +48,7 @@ namespace JR_NK_MVC_Core.Entities
                     .IsUnicode(false);
 
                 entity.Property(e => e.Name)
-                    .HasMaxLength(64)
+                    .HasMaxLength(50)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Permission)
@@ -64,23 +56,22 @@ namespace JR_NK_MVC_Core.Entities
                     .IsUnicode(false);
 
                 entity.Property(e => e.Pid).HasColumnName("PID");
+
+                entity.Property(e => e.Type).HasComment("1级菜单2二级菜单3三级菜单4页面按钮");
             });
 
-            modelBuilder.Entity<SysRole>(entity =>
+            modelBuilder.Entity<AdminRole>(entity =>
             {
-                entity.ToTable("sys_role");
+                entity.ToTable("admin_role");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("ID")
-                    .HasComment(" ");
+                entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Code)
                     .HasMaxLength(64)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Name)
-                    .HasMaxLength(64)
+                    .HasMaxLength(50)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Remark)
@@ -89,59 +80,29 @@ namespace JR_NK_MVC_Core.Entities
                     .HasComment("备注");
             });
 
-            modelBuilder.Entity<SysRoleMenu>(entity =>
+            modelBuilder.Entity<AdminRoleMenu>(entity =>
             {
-                entity.HasNoKey();
+                entity.ToTable("admin_role_menu");
 
-                entity.ToTable("sys_role_menu");
+                entity.Property(e => e.Id).HasColumnName("ID");
 
-                entity.HasIndex(e => new { e.SysRoleId, e.SysMenuId }, "index_role_menu")
-                    .IsUnique();
+                entity.Property(e => e.MenuId).HasComment("菜单ID");
 
-                entity.Property(e => e.SysMenuId).HasComment("菜单ID");
-
-                entity.Property(e => e.SysRoleId).HasComment("角色ID");
-
-                entity.HasOne(d => d.SysMenu)
-                    .WithMany()
-                    .HasForeignKey(d => d.SysMenuId)
-                    .HasConstraintName("fk_rm_menu");
-
-                entity.HasOne(d => d.SysRole)
-                    .WithMany()
-                    .HasForeignKey(d => d.SysRoleId)
-                    .HasConstraintName("fk_rm_role");
+                entity.Property(e => e.RoleId).HasComment("角色ID");
             });
 
-            modelBuilder.Entity<SysUser>(entity =>
+            modelBuilder.Entity<AdminUser>(entity =>
             {
-                entity.ToTable("sys_user");
+                entity.ToTable("admin_user");
 
-                entity.HasIndex(e => e.Account, "index_u_a")
-                    .IsUnique();
-
-                entity.HasIndex(e => new { e.Account, e.Password }, "index_u_a_p");
-
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("ID");
+                entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Account)
                     .HasMaxLength(64)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Avatar)
-                    .HasMaxLength(64)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Birthday).HasColumnType("date");
-
-                entity.Property(e => e.Email)
-                    .HasMaxLength(64)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.Name)
-                    .HasMaxLength(64)
+                    .HasMaxLength(50)
                     .IsUnicode(false);
 
                 entity.Property(e => e.NickName)
@@ -151,32 +112,13 @@ namespace JR_NK_MVC_Core.Entities
                 entity.Property(e => e.Password)
                     .HasMaxLength(64)
                     .IsUnicode(false);
-
-                entity.Property(e => e.Phone)
-                    .HasMaxLength(64)
-                    .IsUnicode(false);
             });
 
-            modelBuilder.Entity<SysUserRole>(entity =>
+            modelBuilder.Entity<AdminUserRole>(entity =>
             {
-                entity.HasNoKey();
+                entity.ToTable("admin_user_role");
 
-                entity.ToTable("sys_user_role");
-
-                entity.HasIndex(e => new { e.SysUserId, e.SysRoleId }, "index_user_role")
-                    .IsUnique();
-
-                entity.HasOne(d => d.SysRole)
-                    .WithMany()
-                    .HasForeignKey(d => d.SysRoleId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_ur_role");
-
-                entity.HasOne(d => d.SysUser)
-                    .WithMany()
-                    .HasForeignKey(d => d.SysUserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_ur_user");
+                entity.Property(e => e.Id).HasColumnName("ID");
             });
 
             OnModelCreatingPartial(modelBuilder);

@@ -1,0 +1,296 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <script src="../../common/vue/vue.js"></script>
+    <script src="../../common/axios/axios.min.js"></script>
+    <script src="../../common/jquery/jquery-3.0.0.min.js"></script>
+    <link rel="stylesheet" href="../../common/element/index.css">
+    <script src="../../common/element/index.js"></script>
+    <style>
+        .el-table__header-wrapper .el-checkbox {
+            display: none
+        }
+        .el-divider--vertical {
+            height: 1.5em;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <el-row>
+            <el-col :span="1">
+                <el-tag>用户</el-tag>
+            </el-col>
+            <el-col :span="10">
+                <div>
+                    <el-table ref="userTable"
+                              :data="userTableData"
+                              style="width: 100%"
+                              height="800"
+                              @row-click="clickUserRow"
+                              :row-class-name="userTableRowClass"
+                              :row-style="selectedUserRowstyle">
+                        <el-table-column type="index"
+                                         label="序号"
+                                         :index="indexMethod">
+                        </el-table-column>
+                        <el-table-column prop="account"
+                                         label="账号"
+                                         width="100px">
+                        </el-table-column>
+                        <el-table-column prop="nickName"
+                                         label="昵称"
+                                         width="100px">
+                        </el-table-column>
+                        <el-table-column prop="name"
+                                         label="名字">
+                        </el-table-column>
+                        <el-table-column prop="name"
+                                         label="名字">
+                        </el-table-column>
+                        <el-table-column prop="name"
+                                         label="名字">
+                        </el-table-column>
+                        <el-table-column prop="name"
+                                         label="名字">
+                        </el-table-column>
+                        <el-table-column prop="name"
+                                         label="名字">
+                        </el-table-column>
+                    </el-table>
+                </div>
+            </el-col>
+            <el-col :span="1">
+                <el-divider direction="vertical"></el-divider>
+                <el-tag>角色</el-tag>
+            </el-col>
+            <el-col :span="6">
+                <div style="text-align:right;">
+                    <el-button type="success" @click="saveUserRole" size="small">保存</el-button>
+                    <el-button type="danger" @click="handleRevocationRole" size="small">撤销</el-button>
+                </div>
+                <div style="height: 765px;overflow: auto;margin:5px">
+                    <el-checkbox @change="handleCheckAll" v-model="checkAll">全选</el-checkbox>
+                    <el-checkbox-group v-model="checkedRoleList">
+                        <div v-for="item in roleList">
+                            <el-checkbox :key="item.ID"
+                                                :label="item.ID"
+                                                @change=""
+                                                style="width:70%;margin-bottom:5px;">
+                                {{item.Name}}
+                            </el-checkbox>
+                            <el-button :id="handleRoelEditBottonId(item.ID)" type="primary" style="margin-bottom: 5px;" icon="el-icon-edit" size="small" @click="getPermissionTreeData(item.Name,item.ID)"></el-button>
+                        </div>
+                    </el-checkbox-group>
+                </div>
+            </el-col>
+            <el-col :span="1">
+                <el-divider direction="vertical"></el-divider>
+                <el-tag>权限</el-tag>
+            </el-col>
+            <el-col :span="5">
+                <div style="text-align:right">
+                    <el-tag>所属角色:</el-tag>
+                    <el-tag type="danger">{{roleCheckedClickName}}</el-tag>
+                    <el-button type="success" @click="saveRolePermission" size="small" style="margin:auto">保存</el-button>
+                    <el-button type="danger" @click="handleRevocationPermission" size="small">撤销</el-button>
+                </div>
+                <div style="height: 760px;overflow: auto;margin:5px">
+                    <el-tree ref="permissionTree"
+                             :data="permissionTreeData"
+                             show-checkbox
+                             node-key="id"
+                             :default-expanded-keys="expanded_keys"
+                             :default-checked-keys="checked_keys"
+                             :props="defaultProps">
+                    </el-tree>
+                </div>
+            </el-col>
+        </el-row>
+    </div>
+    <script>
+        axios.defaults.headers.Authorization = JSON.parse(sessionStorage.getItem("Authorization"));
+        new Vue({
+            el: "#app",
+            data: {
+                userTableData: [],
+                userTableClickIndex: null,
+                userTableClickId: null,
+                roleCheckedClickId: null,
+                roleCheckedClickName: '暂未选择角色',
+                checkedRoleList: [],
+                checkAll: false,
+                roleList: [],
+                permissionTreeData: [],
+                expanded_keys: [],
+                checked_keys: [],
+                defaultProps: {
+                    children: 'children',
+                    label: 'name'
+                },
+                userQueryReq: {},
+                saveUserRoleReq: {},
+                saveRolePermissionReq: {},
+                pageUser: {},
+                roleQueryReq: {},
+                pageRole: {},
+                permissionQueryReq: {},
+            },
+            methods: {
+                getPermissionTreeData: function (roleName, roleId) {//点击角色编辑按钮触发 加载权限树
+                    this.roleCheckedClickId = roleId;//当前选中的角色ID
+                    this.roleCheckedClickName = roleName;//当前选中的角色名称
+                    this.roleShowNameSplit();//处理名称过长
+                    this.changeClickRoleEditButtonStyle(roleId);//改变当前点击编辑按钮的样式
+                    axios.get('/admin/loadPermissionTree?roleId=' + roleId).then(response => {
+                        if (response.data.code === 1) {
+                            this.permissionTreeData = response.data.data.permissionTree;
+                            this.expanded_keys = response.data.data.expanded_keys;
+                            this.checked_keys = response.data.data.checked_keys;
+                        } else {
+                            alert(response.data.message);
+                        }
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+                },
+                getUserTableData: function () {//加载用户列表
+                    axios.post('/admin/user', this.$data.userQueryReq).then(response => {
+                        if (response.data.code === 1) {
+                            this.userTableData = response.data.data.tableData;
+                        } else {
+                            alert(response.data.message);
+                        }
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+                },
+                getRoleCheckBox: function (userId, methed) {//点击用户列表行触发
+                    this.userTableClickId = userId;//当前选中的用户ID
+                    this.roleCheckedClickId = null;//当前选中的角色ID
+                    if (methed === 1) {
+                        this.roleCheckedClickName = '暂未选择角色';//当前选中的角色名称,methed为1时为加载角色
+                        this.changeClickRoleEditButtonStyle(0);//恢复点击编辑按钮的样式
+                    }
+                    axios.get('/admin/loadRoleCheckBox?userId=' + userId).then(response => {
+                        if (response.data.code === 1) {
+                            this.checkedRoleList = response.data.data.checkedRoleList;
+                            this.roleList = response.data.data.roleList;
+                        } else {
+                            alert(response.data.message);
+                        }
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+                },
+                saveUserRole() {//保存用户角色
+                    this.saveUserRoleReq.checkedRoleList = this.checkedRoleList;
+                    this.saveUserRoleReq.userId = this.userTableClickId;
+                    axios.post('/admin/saveUserRole', this.$data.saveUserRoleReq).then(response => {
+                        if (response.data.code === 1) {
+                            if (response.data.data) {
+                                this.$message({ message: '用户角色修改成功', type: 'success' });
+                                return;
+                            } else {
+                                this.$message.error('用户添加角色修改失败');
+                            }
+                        } else {
+                            alert(response.data.message);
+                        }
+                        this.getRoleCheckBox(this.userTableClickId, 1);
+                        this.saveUserRoleReq = {};//重置参数
+                    }).catch(function (error) {
+                        console.log(error);
+                        this.saveUserRoleReq = {};//重置参数
+                        this.getRoleCheckBox(this.userTableClickId, 1);
+                    });
+                },
+                saveRolePermission() {//保存角色权限
+                    this.saveRolePermissionReq.checkedMenuList = this.getPermissionCheckedNodes();
+                    this.saveRolePermissionReq.roleId = this.roleCheckedClickId;
+                    console.log(this.saveRolePermissionReq);
+                    axios.post('/admin/saveRoleMenu', this.$data.saveRolePermissionReq).then(response => {
+                        if (response.data.code === 1) {
+                            if (response.data.data) {
+                                this.$message({ message: '角色权限修改成功', type: 'success' });
+                                return;
+                            } else {
+                                this.$message.error('角色权限修改失败');
+                            }
+                        } else {
+                            alert(response.data.message);
+                        }
+                        this.saveRolePermissionReq = {};//重置参数
+                        this.getPermissionTreeData(this.roleCheckedClickName, this.roleCheckedClickId); 
+                    }).catch(function (error) {
+                        console.log(error);
+                        this.saveRolePermissionReq = {};//重置参数
+                        this.getPermissionTreeData(this.roleCheckedClickName, this.roleCheckedClickId); 
+                    });
+                },
+                getPermissionCheckedNodes() {//获取选中的节点及其父节点
+                    var nodes = this.$refs.permissionTree.getCheckedNodes(false, true);
+                    var array = [];
+                    for (var i = 0; i < nodes.length; i++) {
+                        array.push(nodes[i].id);
+                    }
+                    return array;
+                },
+                clickUserRow(row, column, event) {//单击表格行
+                    this.userTableClickIndex = row.index;
+                    this.permissionTreeData = null;
+                    this.getRoleCheckBox(row.id, 1);//加载角色选择框
+                },
+                userTableRowClass({ row, rowIndex }) {
+                    row.index = rowIndex;
+                },
+                selectedUserRowstyle({ row, rowIndex }) {//动态设置行的样式
+                    if (this.userTableClickIndex === rowIndex) {//点击行改变当前行样式
+                        return { "background-color": "Silver" };
+                    }
+                },
+                handleCheckAll() {//全选
+                    if (this.checkAll) {
+                        for (var i = 0; i < this.roleList.length; i++) {
+                            this.checkedRoleList.push(this.roleList[i].ID);
+                        }
+                    } else {
+                        this.checkedRoleList = [];
+                    }
+                },
+                handleRevocationRole() {//撤销角色编辑
+                    this.getRoleCheckBox(this.userTableClickId, 0);
+                    this.checkAll = false;
+                },
+                handleRevocationPermission() {//撤销权限编辑
+                    this.getPermissionTreeData(this.roleCheckedClickName, this.roleCheckedClickId); 
+                },
+                indexMethod(index) {//生成序号
+                    return index + 1;
+                },
+                changeClickRoleEditButtonStyle(roleId) {//改变点击选中的角色编辑按钮样式
+                    var styleNo = "margin-bottom: 5px;"
+                    var styleYes = "margin-bottom: 5px;background-color:#FF6600;color:black;";
+                    for (var i = 0; i < this.roleList.length; i++) {
+                        if (this.roleList[i].ID == roleId) {
+                            document.getElementById(this.roleList[i].ID).style = styleYes;
+                        } else {
+                            document.getElementById(this.roleList[i].ID).style = styleNo;
+                        }
+                    }
+                },
+                roleShowNameSplit() {//防止角色名过长显示溢出
+                    if (this.roleCheckedClickName.length > 6) this.roleCheckedClickName = this.roleCheckedClickName.substring(0, 6) + "...";
+                },
+                handleRoelEditBottonId(roleId) {//动态生成角色编辑按钮的ID
+                    return roleId;
+                }
+            },
+            created: function () {
+                this.getUserTableData();
+            }
+        });
+    </script>
+</body>
+</html>

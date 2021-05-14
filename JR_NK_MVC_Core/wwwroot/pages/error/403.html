@@ -15,7 +15,7 @@
         <div class="el-upload__tip" slot="tip" style="font-size:20px">1:您没有访问权限</div>
         <div class="el-upload__tip" slot="tip" style="font-size:20px">2:长时间未操作令牌过期，需要重新登录</div>
         <div class="el-upload__tip" slot="tip" style="font-size:20px">3:请联系管理员</div>
-        <!--<el-button style="margin-top: 20px;font-size:20px" size="small" type="success" @click="refresh">刷新</el-button>-->
+        <el-button style="margin-top: 20px;font-size:20px" size="small" type="success" @click="refresh">点击返回登录页面</el-button>
     </div>
     <script>
         var Main = {
@@ -25,7 +25,7 @@
             },
             methods: {
                 refresh() {
-                    top.location.reload();
+                    top.location.href = "../home/login.html";
                 }
             },
             created: function () {

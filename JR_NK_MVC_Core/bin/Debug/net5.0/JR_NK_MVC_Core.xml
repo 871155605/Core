@@ -1364,16 +1364,64 @@
             <param name="req"></param>
             <returns></returns>
         </member>
-        <member name="M:JR_NK_MVC_Core.Controllers.AdminController.Test(JR_NK_MVC_Core.Models.SysUserReq)">
+        <member name="M:JR_NK_MVC_Core.Controllers.AdminController.AddUser(JR_NK_MVC_Core.Entities.AdminUser)">
             <summary>
-            测试查询
+            添加用户
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JR_NK_MVC_Core.Controllers.AdminController.UpdateUser(JR_NK_MVC_Core.Entities.AdminUser)">
+            <summary>
+            修改用户
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JR_NK_MVC_Core.Controllers.AdminController.DeleteUser(JR_NK_MVC_Core.Entities.AdminUser)">
+            <summary>
+            删除用户
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JR_NK_MVC_Core.Controllers.AdminController.SelectUser(JR_NK_MVC_Core.Models.SysUserReq)">
+            <summary>
+            查询用户列表
             </summary>
             <param name="req"></param>
             <returns></returns>
         </member>
-        <member name="M:JR_NK_MVC_Core.Controllers.AdminController.Test1(JR_NK_MVC_Core.Models.SysUserReq)">
+        <member name="M:JR_NK_MVC_Core.Controllers.AdminController.SelectRole(JR_NK_MVC_Core.Models.SysRoleReq)">
             <summary>
-            测试查询1
+            查询角色列表
+            </summary>
+            <param name="req"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JR_NK_MVC_Core.Controllers.AdminController.LoadPermissionTree(System.Int32)">
+            <summary>
+            加载权限树
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:JR_NK_MVC_Core.Controllers.AdminController.LoadRoleCheckBox(System.Int32)">
+            <summary>
+            加载选择框角色列表
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JR_NK_MVC_Core.Controllers.AdminController.SaveUserRole(JR_NK_MVC_Core.Models.SaveUserRoleMenuReq)">
+            <summary>
+            保存用户的角色
+            </summary>
+            <param name="req"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JR_NK_MVC_Core.Controllers.AdminController.SaveRoleMenu(JR_NK_MVC_Core.Models.SaveUserRoleMenuReq)">
+            <summary>
+            保存角色的权限
             </summary>
             <param name="req"></param>
             <returns></returns>
@@ -1455,6 +1503,28 @@
             当前页
             </summary>
         </member>
+        <member name="M:JR_NK_MVC_Core.Service.Impl.SysAdminServiceImpl.LoadPermissionButtonAsync(System.Int32,System.Collections.Generic.List{System.Int32},System.Collections.Generic.List{System.Int32})">
+            <summary>
+            加载选择树
+            加载展开树
+            需要优化SQL
+            </summary>
+        </member>
+        <member name="M:JR_NK_MVC_Core.Service.Impl.SysAdminServiceImpl.LoadPermissionButtonAsync(JR_NK_MVC_Core.Models.PermissionTree)">
+            <summary>
+            加载单个节点下的所有按钮
+            </summary>
+            <param name="permissionTree"></param>
+        </member>
+        <member name="M:JR_NK_MVC_Core.Service.Impl.SysAdminServiceImpl.LoadPermissionButtonAsync(System.String,JR_NK_MVC_Core.Entities.AdminMenu,System.Collections.Generic.List{System.String})">
+            <summary>
+            加载角色权限按钮
+            </summary>
+            <param name="account"></param>
+            <param name="AdminMenu"></param>
+            <param name="permissionStringList"></param>
+            <returns></returns>
+        </member>
         <member name="T:JR_NK_MVC_Core.Service.ISysAdminService">
             <summary>
             权限管理服务
@@ -1480,7 +1550,21 @@
             <summary>
             加载用户权限
             </summary>
-            <param name="user"></param>
+            <param name="account"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JR_NK_MVC_Core.Service.ISysAdminService.LoadPermissionTreeAsync(System.Int32)">
+            <summary>
+            加载权限树
+            </summary>
+            <param name="roleId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JR_NK_MVC_Core.Service.ISysAdminService.LoadRoleCheckBoxAsync(System.Int32)">
+            <summary>
+            加载授权选择盒子
+            </summary>
+            <param name="userId"></param>
             <returns></returns>
         </member>
         <member name="M:JR_NK_MVC_Core.Service.ISysAdminService.LoadUsersAsync(JR_NK_MVC_Core.Models.SysUserReq)">
@@ -1490,39 +1574,48 @@
             <param name="req"></param>
             <returns></returns>
         </member>
-        <member name="M:JR_NK_MVC_Core.Service.ISysAdminService.AddUserAsync(JR_NK_MVC_Core.Entities.SysUser)">
+        <member name="M:JR_NK_MVC_Core.Service.ISysAdminService.LoadRolesAsync(JR_NK_MVC_Core.Models.SysRoleReq)">
+            <summary>
+            加载所有角色
+            </summary>
+            <param name="req"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JR_NK_MVC_Core.Service.ISysAdminService.AddUserAsync(JR_NK_MVC_Core.Entities.AdminUser)">
             <summary>
             添加用户
             </summary>
             <param name="user"></param>
             <returns></returns>
         </member>
-        <member name="M:JR_NK_MVC_Core.Service.ISysAdminService.AddUserRolesAsync(System.Collections.Generic.List{JR_NK_MVC_Core.Entities.SysUserRole})">
+        <member name="M:JR_NK_MVC_Core.Service.ISysAdminService.UpdateUserAsync(JR_NK_MVC_Core.Entities.AdminUser)">
             <summary>
-            给用户添加角色
+            修改用户
             </summary>
-            <param name="urs"></param>
+            <param name="user"></param>
             <returns></returns>
         </member>
-        <member name="M:JR_NK_MVC_Core.Service.ISysAdminService.AddRoleAsync(JR_NK_MVC_Core.Entities.SysRole)">
+        <member name="M:JR_NK_MVC_Core.Service.ISysAdminService.DeleteUserAsync(JR_NK_MVC_Core.Entities.AdminUser)">
             <summary>
-            添加角色
+            删除用户
             </summary>
-            <param name="role"></param>
+            <param name="user"></param>
             <returns></returns>
         </member>
-        <member name="M:JR_NK_MVC_Core.Service.ISysAdminService.AddRoleMenusAsync(System.Collections.Generic.List{JR_NK_MVC_Core.Entities.SysRoleMenu})">
+        <member name="M:JR_NK_MVC_Core.Service.ISysAdminService.SaveUserRoleAsync(System.Collections.Generic.List{System.Int32},System.Int32)">
             <summary>
-            给角色添加权限
+            保存用户角色
             </summary>
-            <param name="rms"></param>
+            <param name="checkedRoleList"></param>
+            <param name="userId"></param>
             <returns></returns>
         </member>
-        <member name="M:JR_NK_MVC_Core.Service.ISysAdminService.AddMenuAsync(JR_NK_MVC_Core.Entities.SysMenu)">
+        <member name="M:JR_NK_MVC_Core.Service.ISysAdminService.SaveRoleMenuAsync(System.Collections.Generic.List{System.Int32},System.Int32)">
             <summary>
-            添加权限
+            保存用户角色
             </summary>
-            <param name="menu"></param>
+            <param name="checkedMenuList"></param>
+            <param name="roleId"></param>
             <returns></returns>
         </member>
         <member name="M:JR_NK_MVC_Core.Service.IUploadService.UploadAsync(Microsoft.AspNetCore.Http.IFormFileCollection)">

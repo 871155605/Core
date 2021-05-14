@@ -10,10 +10,10 @@ namespace JR_NK_MVC_Core.Models
         /// <summary>
         /// 每页显示数
         /// </summary>
-        public int PageSize { get; set; } = 10;
+        public int PageSize { get; set; }
         /// <summary>
         /// 当前页
         /// </summary>
-        public int CurrentPage { get; set; } = 1;
+        public int CurrentPage { get; set; }
 }
 }

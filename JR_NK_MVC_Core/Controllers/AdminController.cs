@@ -38,7 +38,7 @@ namespace JR_NK_MVC_Core.Controllers
         {
             try
             {
-                SysUser user = await _adminService.LoadUserAsync(req.Username, req.Password);
+                AdminUser user = await _adminService.LoadUserAsync(req.Username, req.Password);
                 if (user == null) return GlobalResponse.Of(-1000, "账号密码错误");
                 Dictionary<string, Object> keyValues = _cache.Get<Dictionary<string, Object>>($"{ req.Username}-permission-menu");
                 if (keyValues == null) keyValues = await _adminService.LoadUserPermissionMenusAsync(req.Username);
@@ -46,42 +46,201 @@ namespace JR_NK_MVC_Core.Controllers
                 if (permissionStringList == null) return GlobalResponse.Of(-1, "权限加载失败");
                 keyValues.TryGetValue("menus", out object permissionMenuList);
                 if (permissionMenuList == null) return GlobalResponse.Of(-1, "权限菜单加载失败");
-                _cache.Set($"{ req.Username}-permission-menu", keyValues);
+                //_cache.Set($"{req.Username}-permission-menu", keyValues); //方便测试可先取消缓存
                 var tokenJson = await _adminService.GetJwtTokenAsync((List<string>)permissionStringList, req.Username);
                 if (tokenJson == null) return GlobalResponse.Of(-1, "获取TOKEN失败");
                 return GlobalResponse.Of(new LoginRes { User = user, PermissionMenuList = (List<PermissionMenu>)permissionMenuList, TokenJson = tokenJson });
             }
             catch (Exception e)
             {
-                _logger.Error(typeof(AdminController), e.Message);
+                _logger.Error(typeof(AdminController), e.ToString());
                 return GlobalResponse.Of(-1, e.Message);
             }
         }
 
         /// <summary>
-        /// 测试查询
+        /// 添加用户
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        [HttpPost("addUser")]
+        [Authorize("Custom")]
+        public async Task<GlobalResponse> AddUser([FromBody] AdminUser user) {
+            try
+            {
+                bool flag = await _adminService.AddUserAsync(user);
+                return GlobalResponse.Of(flag);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(typeof(AdminController), e.ToString());
+                return GlobalResponse.Of(-1, e.Message);
+            }
+        }
+
+        /// <summary>
+        /// 修改用户
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        [HttpPost("updateUser")]
+        [Authorize("Custom")]
+        public async Task<GlobalResponse> UpdateUser([FromBody] AdminUser user)
+        {
+            try
+            {
+                bool flag = await _adminService.UpdateUserAsync(user);
+                return GlobalResponse.Of(flag);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(typeof(AdminController), e.ToString());
+                return GlobalResponse.Of(-1, e.Message);
+            }
+        }
+
+        /// <summary>
+        /// 删除用户
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        [HttpPost("deleteUser")]
+        [Authorize("Custom")]
+        public async Task<GlobalResponse> DeleteUser([FromBody] AdminUser user)
+        {
+            try
+            {
+                bool flag = await _adminService.DeleteUserAsync(user);
+                return GlobalResponse.Of(flag);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(typeof(AdminController), e.ToString());
+                return GlobalResponse.Of(-1, e.Message);
+            }
+        }
+
+        /// <summary>
+        /// 查询用户列表
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
         [HttpPost("user")]
         [Authorize("Custom")]
-        public async Task<GlobalResponse> Test([FromBody] SysUserReq req)
+        public async Task<GlobalResponse> SelectUser([FromBody] SysUserReq req)
         {
-            var resp = await _adminService.LoadUsersAsync(req);
-            return GlobalResponse.Of(resp);
+            try
+            {
+                var resp = await _adminService.LoadUsersAsync(req);
+                return GlobalResponse.Of(resp);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(typeof(AdminController), e.ToString());
+                return GlobalResponse.Of(-1, e.Message);
+            }
         }
 
         /// <summary>
-        /// 测试查询1
+        /// 查询角色列表
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
-        [HttpPost("user1")]
+        [HttpPost("role")]
         [Authorize("Custom")]
-        public async Task<GlobalResponse> Test1([FromBody] SysUserReq req)
+        public async Task<GlobalResponse> SelectRole([FromBody] SysRoleReq req)
         {
-            var resp = await _adminService.LoadUsersAsync(req);
-            return GlobalResponse.Of(resp);
+            try
+            {
+                var resp = await _adminService.LoadRolesAsync(req);
+                return GlobalResponse.Of(resp);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(typeof(AdminController), e.ToString());
+                return GlobalResponse.Of(-1, e.Message);
+            }
+        }
+
+        /// <summary>
+        /// 加载权限树
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("loadPermissionTree")]
+        [Authorize("Custom")]
+        public async Task<GlobalResponse> LoadPermissionTree(int roleId) {
+            try
+            {
+                var resp = await _adminService.LoadPermissionTreeAsync(roleId);
+                return GlobalResponse.Of(resp);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(typeof(AdminController),e);
+                return GlobalResponse.Of(-1,e.Message);
+            }
+        }
+
+        /// <summary>
+        /// 加载选择框角色列表
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        [HttpGet("loadRoleCheckBox")]
+        [Authorize("Custom")]
+        public async Task<GlobalResponse> LoadRoleCheckBox(int userId) {
+            try
+            {
+                var resp = await _adminService.LoadRoleCheckBoxAsync(userId);
+                return GlobalResponse.Of(resp);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(typeof(AdminController), e.ToString());
+                return GlobalResponse.Of(-1, e.Message);
+            }
+        }
+
+        /// <summary>
+        /// 保存用户的角色
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        [HttpPost("saveUserRole")]
+        [Authorize("Custom")]
+        public async Task<GlobalResponse> SaveUserRole([FromBody] SaveUserRoleMenuReq req)
+        {
+            try
+            {
+                var resp = await _adminService.SaveUserRoleAsync(req.CheckedRoleList,req.UserId);
+                return GlobalResponse.Of(resp);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(typeof(AdminController), e.ToString());
+                return GlobalResponse.Of(-1, e.Message);
+            }
+        }
+
+        /// <summary>
+        /// 保存角色的权限
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        [HttpPost("saveRoleMenu")]
+        [Authorize("Custom")]
+        public async Task<GlobalResponse> SaveRoleMenu([FromBody] SaveUserRoleMenuReq req)
+        {
+            try
+            {
+                var resp = await _adminService.SaveRoleMenuAsync(req.CheckedMenuList, req.RoleId);
+                return GlobalResponse.Of(resp);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(typeof(AdminController), e.ToString());
+                return GlobalResponse.Of(-1, e.Message);
+            }
         }
     }
 }

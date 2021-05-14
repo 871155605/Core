@@ -19,7 +19,7 @@ namespace JR_NK_MVC_Core.Service
         /// <param name="account"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public Task<SysUser> LoadUserAsync(string account, string password);
+        public Task<AdminUser> LoadUserAsync(string account, string password);
 
         /// <summary>
         /// 获取用户TOKEN
@@ -32,9 +32,23 @@ namespace JR_NK_MVC_Core.Service
         /// <summary>
         /// 加载用户权限
         /// </summary>
-        /// <param name="user"></param>
+        /// <param name="account"></param>
         /// <returns></returns>
-        public Task<Dictionary<string, Object>> LoadUserPermissionMenusAsync(string account);
+        public Task<Dictionary<string,Object>> LoadUserPermissionMenusAsync(string account);
+
+        /// <summary>
+        /// 加载权限树
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
+        public Task<Dictionary<string, Object>> LoadPermissionTreeAsync(int roleId);
+
+        /// <summary>
+        /// 加载授权选择盒子
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public Task<Dictionary<string, Object>> LoadRoleCheckBoxAsync(int userId);
 
         /// <summary>
         /// 加载所有用户
@@ -44,37 +58,47 @@ namespace JR_NK_MVC_Core.Service
         public Task<PageQueryRes> LoadUsersAsync(SysUserReq req);
 
         /// <summary>
+        /// 加载所有角色
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        public Task<PageQueryRes> LoadRolesAsync(SysRoleReq req);
+
+        /// <summary>
         /// 添加用户
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public Task<bool> AddUserAsync(SysUser user);
+        public Task<bool> AddUserAsync(AdminUser user);
 
         /// <summary>
-        /// 给用户添加角色
+        /// 修改用户
         /// </summary>
-        /// <param name="urs"></param>
+        /// <param name="user"></param>
         /// <returns></returns>
-        public Task<bool> AddUserRolesAsync(List<SysUserRole> urs);
+        public Task<bool> UpdateUserAsync(AdminUser user);
 
         /// <summary>
-        /// 添加角色
+        /// 删除用户
         /// </summary>
-        /// <param name="role"></param>
+        /// <param name="user"></param>
         /// <returns></returns>
-        public Task<bool> AddRoleAsync(SysRole role);
+        public Task<bool> DeleteUserAsync(AdminUser user);
 
         /// <summary>
-        /// 给角色添加权限
+        /// 保存用户角色
         /// </summary>
-        /// <param name="rms"></param>
+        /// <param name="checkedRoleList"></param>
+        /// <param name="userId"></param>
         /// <returns></returns>
-        public Task<bool> AddRoleMenusAsync(List<SysRoleMenu> rms);
+        public Task<bool> SaveUserRoleAsync(List<int> checkedRoleList,int userId);
+
         /// <summary>
-        /// 添加权限
+        /// 保存用户角色
         /// </summary>
-        /// <param name="menu"></param>
+        /// <param name="checkedMenuList"></param>
+        /// <param name="roleId"></param>
         /// <returns></returns>
-        public Task<bool> AddMenuAsync(SysMenu menu);
+        public Task<bool> SaveRoleMenuAsync(List<int> checkedMenuList, int roleId);
     }
 }

@@ -7,10 +7,12 @@
     <script src="../../common/jquery/jquery-3.0.0.min.js"></script>
     <link rel="stylesheet" href="../../common/element/index.css">
     <script src="../../common/element/index.js"></script>
+    <script src="../../js/permission.js"></script>
     <style>
         .el-table__header-wrapper .el-checkbox {
             display: none
         }
+
         .el-divider--vertical {
             height: 1.5em;
         }
@@ -67,8 +69,8 @@
             </el-col>
             <el-col :span="6">
                 <div style="text-align:right;">
-                    <el-button type="success" @click="saveUserRole" size="small">保存</el-button>
-                    <el-button type="danger" @click="handleRevocationRole" size="small">撤销</el-button>
+                    <el-button type="success" @click="saveUserRole" size="small" v-if="buttonVisible.saveUserRole">保存</el-button>
+                    <el-button type="danger" @click="handleRevocationRole" size="small" v-if="buttonVisible.saveUserRole">撤销</el-button>
                 </div>
                 <div style="height: 765px;overflow: auto;margin:5px">
                     <el-checkbox @change="handleCheckAll" v-model="checkAll">全选</el-checkbox>
@@ -93,8 +95,8 @@
                 <div style="text-align:right">
                     <el-tag>所属角色:</el-tag>
                     <el-tag type="danger">{{roleCheckedClickName}}</el-tag>
-                    <el-button type="success" @click="saveRolePermission" size="small" style="margin:auto">保存</el-button>
-                    <el-button type="danger" @click="handleRevocationPermission" size="small">撤销</el-button>
+                    <el-button type="success" @click="saveRolePermission" size="small" style="margin:auto" v-if="buttonVisible.saveRoleMenu">保存</el-button>
+                    <el-button type="danger" @click="handleRevocationPermission" size="small" v-if="buttonVisible.saveRoleMenu">撤销</el-button>
                 </div>
                 <div style="height: 760px;overflow: auto;margin:5px">
                     <el-tree ref="permissionTree"
@@ -120,6 +122,13 @@
                 roleCheckedClickId: null,
                 roleCheckedClickName: '暂未选择角色',
                 checkedRoleList: [],
+                pTitle: 'admin',
+                sTitle: 'permissionEdit',
+                permissions: [],
+                buttonVisible: {
+                    saveRoleMenu: false,
+                    saveUserRole: false
+                },
                 checkAll: false,
                 roleList: [],
                 permissionTreeData: [],
@@ -143,7 +152,7 @@
                     this.roleCheckedClickName = roleName;//当前选中的角色名称
                     this.roleShowNameSplit();//处理名称过长
                     this.changeClickRoleEditButtonStyle(roleId);//改变当前点击编辑按钮的样式
-                    axios.get('/admin/loadPermissionTree?roleId=' + roleId).then(response => {
+                    axios.get('/admin/loadPermissionTreePermissionEdit?roleId=' + roleId).then(response => {
                         if (response.data.code === 1) {
                             this.permissionTreeData = response.data.data.permissionTree;
                             this.expanded_keys = response.data.data.expanded_keys;
@@ -173,7 +182,7 @@
                         this.roleCheckedClickName = '暂未选择角色';//当前选中的角色名称,methed为1时为加载角色
                         this.changeClickRoleEditButtonStyle(0);//恢复点击编辑按钮的样式
                     }
-                    axios.get('/admin/loadRoleCheckBox?userId=' + userId).then(response => {
+                    axios.get('/admin/loadRoleCheckBoxPermissionEdit?userId=' + userId).then(response => {
                         if (response.data.code === 1) {
                             this.checkedRoleList = response.data.data.checkedRoleList;
                             this.roleList = response.data.data.roleList;
@@ -187,7 +196,7 @@
                 saveUserRole() {//保存用户角色
                     this.saveUserRoleReq.checkedRoleList = this.checkedRoleList;
                     this.saveUserRoleReq.userId = this.userTableClickId;
-                    axios.post('/admin/saveUserRole', this.$data.saveUserRoleReq).then(response => {
+                    axios.post('/admin/saveUserRolePermissionEdit', this.$data.saveUserRoleReq).then(response => {
                         if (response.data.code === 1) {
                             if (response.data.data) {
                                 this.$message({ message: '用户角色修改成功', type: 'success' });
@@ -210,7 +219,7 @@
                     this.saveRolePermissionReq.checkedMenuList = this.getPermissionCheckedNodes();
                     this.saveRolePermissionReq.roleId = this.roleCheckedClickId;
                     console.log(this.saveRolePermissionReq);
-                    axios.post('/admin/saveRoleMenu', this.$data.saveRolePermissionReq).then(response => {
+                    axios.post('/admin/saveRoleMenuPermissionEdit', this.$data.saveRolePermissionReq).then(response => {
                         if (response.data.code === 1) {
                             if (response.data.data) {
                                 this.$message({ message: '角色权限修改成功', type: 'success' });
@@ -285,9 +294,12 @@
                 },
                 handleRoelEditBottonId(roleId) {//动态生成角色编辑按钮的ID
                     return roleId;
-                }
+                },
             },
             created: function () {
+                //权限校验
+                checkPermission(this.pTitle, this.sTitle, this.buttonVisible, this.permissions);
+                //加载数据
                 this.getUserTableData();
             }
         });

@@ -47,7 +47,7 @@ namespace JR_NK_MVC_Core.Service.Impl
             string sql1 = $@"SELECT DISTINCT m.ID,m.Name,m.PID,m.Code,m.Type,m.Icon,m.Permission,m.Link
                             FROM admin_user u,admin_user_role ur,admin_role_menu rm,admin_menu m
                             WHERE u.Account = '{account}' AND u.ID = ur.UserId AND ur.RoleId = rm.RoleId AND rm.MenuId = m.ID AND m.Type = 1";
-            _logger.Info(typeof(SysAdminServiceImpl),sql1);
+            //_logger.Info(typeof(SysAdminServiceImpl),sql1);
             List<AdminMenu> sysMenus1 = (List<AdminMenu>) await DapperSqlHelper.QueryAsync<AdminMenu>(sql1);
             foreach (var item1 in sysMenus1)
             {
@@ -57,7 +57,7 @@ namespace JR_NK_MVC_Core.Service.Impl
                 string sql2 = $@"SELECT m.ID,m.Name,m.PID,m.Code,m.Type,m.Icon,m.Permission,m.Link 
                               FROM admin_user u,admin_user_role ur,admin_role_menu rm,admin_menu m
                               WHERE u.Account = '{account}' AND u.ID = ur.UserId AND ur.RoleId = rm.RoleId AND rm.MenuId = m.ID AND m.Type = 2 AND m.PID = {item1.Id}";
-                _logger.Info(typeof(SysAdminServiceImpl), sql2);
+                //_logger.Info(typeof(SysAdminServiceImpl), sql2);
                 List<AdminMenu> sysMenus2 = (List<AdminMenu>)await DapperSqlHelper.QueryAsync<AdminMenu>(sql2);
                 if (sysMenus2 != null && sysMenus2.Count > 0)
                 {
@@ -71,7 +71,7 @@ namespace JR_NK_MVC_Core.Service.Impl
                         string sql3 = $@"SELECT m.ID,m.Name,m.PID,m.Code,m.Type,m.Icon,m.Permission,m.Link 
                               FROM admin_user u,admin_user_role ur,admin_role_menu rm,admin_menu m
                               WHERE u.Account = '{account}' AND u.ID = ur.UserId AND ur.RoleId = rm.RoleId AND rm.MenuId = m.ID AND m.Type = 3 AND m.PID = {item2.Id}";
-                        _logger.Info(typeof(SysAdminServiceImpl), sql3);
+                        //_logger.Info(typeof(SysAdminServiceImpl), sql3);
                         List<AdminMenu> sysMenus3 = (List<AdminMenu>)await DapperSqlHelper.QueryAsync<AdminMenu>(sql3);
                         if (sysMenus3 != null && sysMenus3.Count > 0)
                         {

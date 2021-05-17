@@ -166,7 +166,7 @@ namespace JR_NK_MVC_Core.Controllers
         /// 加载权限树
         /// </summary>
         /// <returns></returns>
-        [HttpGet("loadPermissionTree")]
+        [HttpGet("loadPermissionTreePermissionEdit")]
         [Authorize("Custom")]
         public async Task<GlobalResponse> LoadPermissionTree(int roleId) {
             try
@@ -186,7 +186,7 @@ namespace JR_NK_MVC_Core.Controllers
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        [HttpGet("loadRoleCheckBox")]
+        [HttpGet("loadRoleCheckBoxPermissionEdit")]
         [Authorize("Custom")]
         public async Task<GlobalResponse> LoadRoleCheckBox(int userId) {
             try
@@ -206,7 +206,7 @@ namespace JR_NK_MVC_Core.Controllers
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
-        [HttpPost("saveUserRole")]
+        [HttpPost("saveUserRolePermissionEdit")]
         [Authorize("Custom")]
         public async Task<GlobalResponse> SaveUserRole([FromBody] SaveUserRoleMenuReq req)
         {
@@ -227,7 +227,7 @@ namespace JR_NK_MVC_Core.Controllers
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
-        [HttpPost("saveRoleMenu")]
+        [HttpPost("saveRoleMenuPermissionEdit")]
         [Authorize("Custom")]
         public async Task<GlobalResponse> SaveRoleMenu([FromBody] SaveUserRoleMenuReq req)
         {

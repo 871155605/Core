@@ -65,6 +65,27 @@ namespace JR_NK_MVC_Core.Service
         public Task<PageQueryRes> LoadRolesAsync(SysRoleReq req);
 
         /// <summary>
+        /// 添加角色
+        /// </summary>
+        /// <param name="role"></param>
+        /// <returns></returns>
+        public Task<bool> AddRoleAsync(AdminRole role);
+
+        /// <summary>
+        /// 修改角色
+        /// </summary>
+        /// <param name="role"></param>
+        /// <returns></returns>
+        public Task<bool> UpdateRoleAsync(AdminRole role);
+
+        /// <summary>
+        /// 删除角色
+        /// </summary>
+        /// <param name="role"></param>
+        /// <returns></returns>
+        public Task<bool> DeleteRoleAsync(AdminRole role);
+
+        /// <summary>
         /// 添加用户
         /// </summary>
         /// <param name="user"></param>

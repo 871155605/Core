@@ -2,11 +2,14 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<style type="text/css">
-		p.tip span {
-			font-weight: bold;
-			color: #cf3b5c;
-		}
+    <style type="text/css">
+        p.tip span {
+            font-weight: bold;
+            color: #cf3b5c;
+        }
+        [v-cloak] {
+            display: none;
+        }
 	</style>
 	<meta charset="utf-8" />
 	<script src="../../common/vue/vue.js"></script>
@@ -17,7 +20,7 @@
 	<script src="../../js/error.js"></script>
 </head>
 <body>
-	<div id="app">
+	<div id="app" v-cloak>
 		<el-container class="home-container">
 			<el-header style="background-color:dodgerblue">
 				<h1>顶部</h1>

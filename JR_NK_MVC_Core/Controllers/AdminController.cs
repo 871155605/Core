@@ -163,6 +163,69 @@ namespace JR_NK_MVC_Core.Controllers
         }
 
         /// <summary>
+        /// 添加角色
+        /// </summary>
+        /// <param name="role"></param>
+        /// <returns></returns>
+        [HttpPost("addRole")]
+        [Authorize("Custom")]
+        public async Task<GlobalResponse> AddRole([FromBody] AdminRole role)
+        {
+            try
+            {
+                bool flag = await _adminService.AddRoleAsync(role);
+                return GlobalResponse.Of(flag);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(typeof(AdminController), e.ToString());
+                return GlobalResponse.Of(-1, e.Message);
+            }
+        }
+
+        /// <summary>
+        /// 修改角色
+        /// </summary>
+        /// <param name="role"></param>
+        /// <returns></returns>
+        [HttpPost("updateRole")]
+        [Authorize("Custom")]
+        public async Task<GlobalResponse> UpdateRole([FromBody] AdminRole role)
+        {
+            try
+            {
+                bool flag = await _adminService.UpdateRoleAsync(role);
+                return GlobalResponse.Of(flag);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(typeof(AdminController), e.ToString());
+                return GlobalResponse.Of(-1, e.Message);
+            }
+        }
+
+        /// <summary>
+        /// 删除角色
+        /// </summary>
+        /// <param name="role"></param>
+        /// <returns></returns>
+        [HttpPost("deleteRole")]
+        [Authorize("Custom")]
+        public async Task<GlobalResponse> DeleteRole([FromBody] AdminRole role)
+        {
+            try
+            {
+                bool flag = await _adminService.DeleteRoleAsync(role);
+                return GlobalResponse.Of(flag);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(typeof(AdminController), e.ToString());
+                return GlobalResponse.Of(-1, e.Message);
+            }
+        }
+
+        /// <summary>
         /// 加载权限树
         /// </summary>
         /// <returns></returns>

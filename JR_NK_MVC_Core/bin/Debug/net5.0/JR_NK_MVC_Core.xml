@@ -1399,6 +1399,27 @@
             <param name="req"></param>
             <returns></returns>
         </member>
+        <member name="M:JR_NK_MVC_Core.Controllers.AdminController.AddRole(JR_NK_MVC_Core.Entities.AdminRole)">
+            <summary>
+            添加角色
+            </summary>
+            <param name="role"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JR_NK_MVC_Core.Controllers.AdminController.UpdateRole(JR_NK_MVC_Core.Entities.AdminRole)">
+            <summary>
+            修改角色
+            </summary>
+            <param name="role"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JR_NK_MVC_Core.Controllers.AdminController.DeleteRole(JR_NK_MVC_Core.Entities.AdminRole)">
+            <summary>
+            删除角色
+            </summary>
+            <param name="role"></param>
+            <returns></returns>
+        </member>
         <member name="M:JR_NK_MVC_Core.Controllers.AdminController.LoadPermissionTree(System.Int32)">
             <summary>
             加载权限树
@@ -1579,6 +1600,27 @@
             加载所有角色
             </summary>
             <param name="req"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JR_NK_MVC_Core.Service.ISysAdminService.AddRoleAsync(JR_NK_MVC_Core.Entities.AdminRole)">
+            <summary>
+            添加角色
+            </summary>
+            <param name="role"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JR_NK_MVC_Core.Service.ISysAdminService.UpdateRoleAsync(JR_NK_MVC_Core.Entities.AdminRole)">
+            <summary>
+            修改角色
+            </summary>
+            <param name="role"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JR_NK_MVC_Core.Service.ISysAdminService.DeleteRoleAsync(JR_NK_MVC_Core.Entities.AdminRole)">
+            <summary>
+            删除角色
+            </summary>
+            <param name="role"></param>
             <returns></returns>
         </member>
         <member name="M:JR_NK_MVC_Core.Service.ISysAdminService.AddUserAsync(JR_NK_MVC_Core.Entities.AdminUser)">

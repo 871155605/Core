@@ -17,11 +17,16 @@
     <script src="../../common/jquery/jquery-3.0.0.min.js"></script>
     <!-- style="background-image: url('../../common/login/login_image/3.jpg');" -->
     <!-- v-bind:style="{backgroundImage:'url(' + bg + ')',backgroundRepeat:'no-repeat',backgroundSize:'100% 100%'}" -->
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
 </head>
 <body>
     <div class="limiter">
         <div class="container-login100" id="login_background" style="background-image: url('../../common/login/login_image/3.jpg');">
-            <div id="loginDiv" class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
+            <div id="loginDiv" class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54" v-cloak>
                 <div id="show_response_msg">
                     <h1 style="font-size:large;color:orangered;" align="center">{{responseMsg}}</h1>
                 </div>

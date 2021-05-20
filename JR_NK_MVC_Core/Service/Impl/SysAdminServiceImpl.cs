@@ -302,8 +302,46 @@ namespace JR_NK_MVC_Core.Service.Impl
                 return new PageQueryRes { TotalCount = 0, TableData = data };
             }
         }
+        public async Task<bool> AddRoleAsync(AdminRole role) {
+            await _dbcontext.AdminRoles.AddAsync(role);
+            return await _dbcontext.SaveChangesAsync() > 0;
+        }
 
-        public async Task<Dictionary<string, Object>> LoadRoleCheckBoxAsync(int userId) {
+        public async Task<bool> UpdateRoleAsync(AdminRole role) {
+            var dbEntity = _dbcontext.AdminRoles.Where(_ => _.Id == role.Id).FirstOrDefault();
+            dbEntity.Name = role.Name;
+            dbEntity.Remark = role.Remark;
+            return await _dbcontext.SaveChangesAsync() > 0;
+        }
+
+        public async Task<bool> DeleteRoleAsync(AdminRole role) {
+            var dbEntity = _dbcontext.AdminRoles.Where(_ => _.Id == role.Id).FirstOrDefault();
+            _dbcontext.AdminRoles.Remove(dbEntity);
+            return await _dbcontext.SaveChangesAsync() > 0;
+        }
+
+        public async Task<bool> AddUserAsync(AdminUser user)
+        {
+            await _dbcontext.AdminUsers.AddAsync(user);
+            return await _dbcontext.SaveChangesAsync() > 0;
+        }
+
+        public async Task<bool> UpdateUserAsync(AdminUser user) {
+            var dbEntity = _dbcontext.AdminUsers.Where(_ => _.Id == user.Id).FirstOrDefault();
+            dbEntity.Password = user.Password;
+            dbEntity.NickName = user.NickName;
+            dbEntity.Name = user.Name;
+            return await _dbcontext.SaveChangesAsync() > 0;
+        }
+
+        public async Task<bool> DeleteUserAsync(AdminUser user) {
+            var dbEntity = _dbcontext.AdminUsers.Where(_ => _.Id == user.Id).FirstOrDefault();
+            _dbcontext.AdminUsers.Remove(dbEntity);
+            return await _dbcontext.SaveChangesAsync() > 0;
+        }
+
+        public async Task<Dictionary<string, Object>> LoadRoleCheckBoxAsync(int userId)
+        {
             Dictionary<string, Object> keyValues = new Dictionary<string, object>();
             string sql = $@"SELECT admin_role.ID
                             FROM admin_role,admin_user_role
@@ -317,28 +355,6 @@ namespace JR_NK_MVC_Core.Service.Impl
             keyValues.Add("checkedRoleList", checkedRoleList);
             keyValues.Add("roleList", roleList);
             return keyValues;
-        }
-
-        public async Task<bool> AddUserAsync(AdminUser user)
-        {
-            await _dbcontext.AdminUsers.AddAsync(user);
-            return await _dbcontext.SaveChangesAsync() > 0;
-        }
-
-        public async Task<bool> UpdateUserAsync(AdminUser user) {
-            var dbEntity = _dbcontext.AdminUsers.Where(_ => _.Id == user.Id).FirstOrDefault();
-            if (dbEntity == null) throw new Exception("用户不存在");
-            dbEntity.Password = user.Password;
-            dbEntity.NickName = user.NickName;
-            dbEntity.Name = user.Name;
-            return await _dbcontext.SaveChangesAsync() > 0;
-        }
-
-        public async Task<bool> DeleteUserAsync(AdminUser user) {
-            var dbEntity = _dbcontext.AdminUsers.Where(_ => _.Id == user.Id).FirstOrDefault();
-            if (dbEntity == null) throw new Exception("用户不存在");
-            _dbcontext.AdminUsers.Remove(dbEntity);
-            return await _dbcontext.SaveChangesAsync() > 0;
         }
 
         public async Task<bool> SaveUserRoleAsync(List<int> checkedRoleList, int userId) {

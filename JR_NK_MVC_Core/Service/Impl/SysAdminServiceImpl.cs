@@ -34,14 +34,13 @@ namespace JR_NK_MVC_Core.Service.Impl
             List<AdminUser> users = await _dbcontext.AdminUsers.Where(_ => _.Account == account && _.Password == password).ToListAsync();
             AdminUser user = null;
             if (users != null && users.Count > 0) user = users[0];
-            //_logger.Info(typeof(SysAdminServiceImpl), $"USER LOGIN USERACCOUNT:{user.Account}");
             return user;
         }
 
         public async Task<Dictionary<string,Object>> LoadUserPermissionMenusAsync(string account) {
-            Dictionary<string, Object> keyValues = new Dictionary<string, object>();
-            List<string> permissionStringList = new List<string>();
-            List<PermissionMenu> permissionMenuList = new List<PermissionMenu>();
+            Dictionary<string, Object> keyValues = new();
+            List<string> permissionStringList = new();
+            List<PermissionMenu> permissionMenuList = new();
             keyValues.Add("menus",permissionMenuList);
             keyValues.Add("permissions", permissionStringList);
             string sql1 = $@"SELECT DISTINCT m.ID,m.Name,m.PID,m.Code,m.Type,m.Icon,m.Permission,m.Link
@@ -51,7 +50,7 @@ namespace JR_NK_MVC_Core.Service.Impl
             List<AdminMenu> sysMenus1 = (List<AdminMenu>) await DapperSqlHelper.QueryAsync<AdminMenu>(sql1);
             foreach (var item1 in sysMenus1)
             {
-                PermissionMenu permission1 = new PermissionMenu { IconCls = item1.Icon, Name = item1.Name,Path= item1.Link, Code = item1.Code };
+                PermissionMenu permission1 = new() { IconCls = item1.Icon, Name = item1.Name,Path= item1.Link, Code = item1.Code };
                 permissionStringList.Add(item1.Permission);
                 permissionMenuList.Add(permission1);
                 string sql2 = $@"SELECT m.ID,m.Name,m.PID,m.Code,m.Type,m.Icon,m.Permission,m.Link 
@@ -61,12 +60,12 @@ namespace JR_NK_MVC_Core.Service.Impl
                 List<AdminMenu> sysMenus2 = (List<AdminMenu>)await DapperSqlHelper.QueryAsync<AdminMenu>(sql2);
                 if (sysMenus2 != null && sysMenus2.Count > 0)
                 {
-                    List<PermissionMenu> Children1 = new List<PermissionMenu>();
+                    List<PermissionMenu> Children1 = new();
                     permission1.Children = Children1;
                     foreach (var item2 in sysMenus2)
                     {
                         permissionStringList.Add(item2.Permission);
-                        PermissionMenu permission2 = new PermissionMenu { IconCls = item2.Icon, Name = item2.Name, Path = item2.Link,Code=item2.Code };
+                        PermissionMenu permission2 = new() { IconCls = item2.Icon, Name = item2.Name, Path = item2.Link,Code=item2.Code };
                         Children1.Add(permission2);
                         string sql3 = $@"SELECT m.ID,m.Name,m.PID,m.Code,m.Type,m.Icon,m.Permission,m.Link 
                               FROM admin_user u,admin_user_role ur,admin_role_menu rm,admin_menu m
@@ -75,12 +74,12 @@ namespace JR_NK_MVC_Core.Service.Impl
                         List<AdminMenu> sysMenus3 = (List<AdminMenu>)await DapperSqlHelper.QueryAsync<AdminMenu>(sql3);
                         if (sysMenus3 != null && sysMenus3.Count > 0)
                         {
-                            List<PermissionMenu> Children2 = new List<PermissionMenu>();
+                            List<PermissionMenu> Children2 = new();
                             permission2.Children = Children2;
                             foreach (var item3 in sysMenus3)
                             {
                                 permissionStringList.Add(item3.Permission);
-                                PermissionMenu permission3 = new PermissionMenu { IconCls = item3.Icon, Name = item3.Name, Path = item3.Link, Code = item3.Code };
+                                PermissionMenu permission3 = new() { IconCls = item3.Icon, Name = item3.Name, Path = item3.Link, Code = item3.Code };
                                 Children2.Add(permission3);
                                 List<string> button3 = await LoadPermissionButtonAsync(account,item3, permissionStringList);
                                 permission3.Button = button3;
@@ -101,13 +100,13 @@ namespace JR_NK_MVC_Core.Service.Impl
         }
 
         public async Task<Dictionary<string, Object>> LoadPermissionTreeAsync(int roleId) {
-            Dictionary<string, Object> keyValues = new Dictionary<string, object>();
+            Dictionary<string, Object> keyValues = new();
             string sql1 = $@"SELECT DISTINCT admin_menu.ID,admin_menu.Name,admin_menu.PID FROM admin_role_menu,admin_menu
             WHERE admin_role_menu.MenuId = admin_menu.ID AND admin_menu.Type = 1;";
             //_logger.Info(typeof(SysAdminServiceImpl), "LoadPermissionTreeAsync-sql1:" + sql1);
             List<PermissionTree> permissionTree1 = (List<PermissionTree>)await DapperSqlHelper.QueryAsync<PermissionTree>(sql1);//加载所有权限树
-            List<int> checked_keys = new List<int>();
-            List<int> expanded_keys = new List<int>();
+            List<int> checked_keys = new();
+            List<int> expanded_keys = new();
             keyValues.Add("checked_keys", checked_keys);
             keyValues.Add("expanded_keys", expanded_keys);
             keyValues.Add("permissionTree", permissionTree1);
@@ -202,7 +201,7 @@ namespace JR_NK_MVC_Core.Service.Impl
                             FROM admin_user u,admin_user_role ur,admin_role_menu rm,admin_menu m
                             WHERE u.Account = '{account}' AND u.ID = ur.UserId AND ur.RoleId = rm.RoleId AND rm.MenuId = m.ID AND m.Type = 4 AND m.PID = @id";
             List<AdminMenu> AdminMenus = (List<AdminMenu>)await DapperSqlHelper.QueryAsync<AdminMenu>(sql,AdminMenu);
-            List<string> button = new List<string>();
+            List<string> button = new();
             foreach (var item in AdminMenus)
             {
                 button.Add(item.Permission);
@@ -253,22 +252,14 @@ namespace JR_NK_MVC_Core.Service.Impl
         }
 
         public async Task<PageQueryRes> LoadUsersAsync(SysUserReq req) {
-            List<Expression<Func<AdminUser, bool>>> where = new List<Expression<Func<AdminUser, bool>>>{x => 1 == 1};
-            if (!req.Name.IsNullOrEmpty()) where.Add(x => x.Name.Contains(req.Name));
-            if (!req.NickName.IsNullOrEmpty()) where.Add(x => x.NickName.Contains(req.NickName));
-            IQueryable<AdminUser> query = null;
-            foreach (var w in where)
-            {
-                query = _dbcontext.AdminUsers.Where(w);
-            }
-            int count = await query.CountAsync();
+            int count = await _dbcontext.AdminUsers.CountAsync();
             if (req.PageSize == 0 || req.CurrentPage == 0)
             {//不分页
-                List<AdminUser> data = await query.ToListAsync();
+                List<AdminUser> data = await _dbcontext.AdminUsers.ToListAsync();
                 return new PageQueryRes { TotalCount = count, TableData = data };
             }
             else {//分页
-                List<AdminUser> data = await query.Skip(req.PageSize * (req.CurrentPage - 1)).Take(req.PageSize).OrderBy(x => x.Id).ToListAsync();
+                List<AdminUser> data = await _dbcontext.AdminUsers.Skip(req.PageSize * (req.CurrentPage - 1)).Take(req.PageSize).OrderBy(x => x.Id).ToListAsync();
                 return new PageQueryRes { TotalCount = count, TableData = data };
             }
         }
@@ -276,22 +267,15 @@ namespace JR_NK_MVC_Core.Service.Impl
         public async Task<PageQueryRes> LoadRolesAsync(SysRoleReq req) {
             if (req.UserId == 0)
             {
-                List<Expression<Func<AdminRole, bool>>> where = new List<Expression<Func<AdminRole, bool>>> { x => 1 == 1 };
-                if (!req.Name.IsNullOrEmpty()) where.Add(x => x.Name.Contains(req.Name));
-                IQueryable<AdminRole> query = null;
-                foreach (var w in where)
-                {
-                    query = _dbcontext.AdminRoles.Where(w);
-                }
-                int count = await query.CountAsync();
+                int count = await _dbcontext.AdminRoles.CountAsync();
                 if (req.PageSize == 0 || req.CurrentPage == 0)
                 {//不分页
-                    List<AdminRole> data = await query.ToListAsync();
+                    List<AdminRole> data = await _dbcontext.AdminRoles.ToListAsync();
                     return new PageQueryRes { TotalCount = count, TableData = data };
                 }
                 else
                 {//分页
-                    List<AdminRole> data = await query.Skip(req.PageSize * (req.CurrentPage - 1)).Take(req.PageSize).OrderBy(x => x.Id).ToListAsync();
+                    List<AdminRole> data = await _dbcontext.AdminRoles.Skip(req.PageSize * (req.CurrentPage - 1)).Take(req.PageSize).OrderBy(x => x.Id).ToListAsync();
                     return new PageQueryRes { TotalCount = count, TableData = data };
                 }
             }
@@ -316,6 +300,7 @@ namespace JR_NK_MVC_Core.Service.Impl
 
         public async Task<bool> DeleteRoleAsync(AdminRole role) {
             var dbEntity = _dbcontext.AdminRoles.Where(_ => _.Id == role.Id).FirstOrDefault();
+            var dbRoleMenu = await _dbcontext.AdminRoleMenus.Where(_=>_.RoleId == role.Id).ToListAsync();
             _dbcontext.AdminRoles.Remove(dbEntity);
             return await _dbcontext.SaveChangesAsync() > 0;
         }
@@ -336,13 +321,15 @@ namespace JR_NK_MVC_Core.Service.Impl
 
         public async Task<bool> DeleteUserAsync(AdminUser user) {
             var dbEntity = _dbcontext.AdminUsers.Where(_ => _.Id == user.Id).FirstOrDefault();
+            var dbUserRole = await _dbcontext.AdminUserRoles.Where(_ => _.UserId == user.Id).ToListAsync();
             _dbcontext.AdminUsers.Remove(dbEntity);
+            _dbcontext.RemoveRange(dbUserRole);
             return await _dbcontext.SaveChangesAsync() > 0;
         }
 
         public async Task<Dictionary<string, Object>> LoadRoleCheckBoxAsync(int userId)
         {
-            Dictionary<string, Object> keyValues = new Dictionary<string, object>();
+            Dictionary<string, Object> keyValues = new();
             string sql = $@"SELECT admin_role.ID
                             FROM admin_role,admin_user_role
                             WHERE admin_role.ID = admin_user_role.RoleId AND admin_user_role.UserId = {userId};
@@ -364,7 +351,7 @@ namespace JR_NK_MVC_Core.Service.Impl
                 string sql1 = $@"DElETE FROM admin_user_role WHERE UserId = {userId};";
                 int a = await DapperSqlHelper.ExecuteAsync(sql1,null,transaction);
                 string sql2 = $@"INSERT INTO admin_user_role (UserId,RoleId) VALUES (@UserId,@RoleId)";
-                List<AdminUserRole> adminUserRoles = new List<AdminUserRole>();
+                List<AdminUserRole> adminUserRoles = new();
                 foreach (var roleId in checkedRoleList)
                 {
                     adminUserRoles.Add(new AdminUserRole { RoleId = roleId, UserId = userId });
@@ -375,7 +362,7 @@ namespace JR_NK_MVC_Core.Service.Impl
             }
             catch (Exception e)
             {
-                //_logger.Error(typeof(SysAdminServiceImpl), $"SAVE_USER_ROLE_ERROR:{e}");
+                _logger.Error(typeof(SysAdminServiceImpl), $"SAVE_USER_ROLE_ERROR:{e}");
                 transaction.Rollback();
                 return false;
             }
@@ -388,7 +375,7 @@ namespace JR_NK_MVC_Core.Service.Impl
                 string sql1 = $@"DElETE FROM admin_role_menu WHERE RoleId = {roleId};";
                 int a = await DapperSqlHelper.ExecuteAsync(sql1, null, transaction);
                 string sql2 = $@"INSERT INTO admin_role_menu (RoleId,MenuId) VALUES (@RoleId,@MenuId)";
-                List<AdminRoleMenu> adminRoleMenus = new List<AdminRoleMenu>();
+                List<AdminRoleMenu> adminRoleMenus = new();
                 foreach (var menuId in checkedMenuList)
                 {
                     adminRoleMenus.Add(new AdminRoleMenu { RoleId = roleId, MenuId = menuId });

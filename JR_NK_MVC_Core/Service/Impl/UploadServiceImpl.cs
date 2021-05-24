@@ -24,13 +24,13 @@ namespace JR_NK_MVC_Core.Service.Impl
         //有BUG
         public async Task<List<string>> UploadAsync(IFormFileCollection files)
         {
-            List<string> filePaths = new List<string>();
+            List<string> filePaths = new();
             if (files == null) throw new Exception("FILES IS NULL");
             foreach (var file in files)
             {
                 string filePath = await UploadAsync(file);
                 filePaths.Add(filePath);
-                using (var stream = System.IO.File.Create(filePath))
+                using var stream = System.IO.File.Create(filePath);
                 await file.CopyToAsync(stream);
             }
             return filePaths;

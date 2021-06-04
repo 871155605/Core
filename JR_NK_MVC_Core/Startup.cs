@@ -131,7 +131,7 @@ namespace JR_NK_MVC_Core
             #endregion
 
             #region 错误代码跳转页面配置 改为前端处理
-            /*app.UseStatusCodePages(async context =>
+/*            app.UseStatusCodePages(async context =>
             {
                 var request = context.HttpContext.Request;
                 var response = context.HttpContext.Response;

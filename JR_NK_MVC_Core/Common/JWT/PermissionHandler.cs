@@ -62,8 +62,8 @@ namespace JR_NK_MVC_Core.Common.JWT
                 if (result?.Principal != null)//登录成功
                 {
                     httpContext.User = result.Principal;
-                    /*#region 校验TOKEN是否过期(框架自带版)
-                    string timeString = httpContext.User.Claims.SingleOrDefault(s => s.Type == ClaimTypes.Expiration)?.Value;
+                    #region 校验TOKEN是否过期(框架自带版)
+                    /*string timeString = httpContext.User.Claims.SingleOrDefault(s => s.Type == ClaimTypes.Expiration)?.Value;
                     if (timeString != null && DateTime.Parse(timeString) >= DateTime.Now)
                     {
                         context.Succeed(requirement);
@@ -74,7 +74,9 @@ namespace JR_NK_MVC_Core.Common.JWT
                         context.Fail();
                         return;
                     }
-                    #endregion*/
+                    */
+                    #endregion
+
                     #region 校验TOKEN是否过期(自定义版)
                     var account = httpContext.User.Claims.SingleOrDefault(s => s.Type == ClaimTypes.Name)?.Value;
                     //Console.WriteLine(account);
@@ -82,18 +84,19 @@ namespace JR_NK_MVC_Core.Common.JWT
                         context.Fail();
                         return;
                     }
-                    long expiredSecond = _cache.Get<long>(account);
-                    //Console.WriteLine($"TOKEN过期时间:{expiredSecond}");
-                    long nowSecond = (long)new TimeSpan(DateTime.UtcNow.Ticks).TotalSeconds;
-                    //Console.WriteLine($"调用接口时间:{nowSecond}");
-                    if (nowSecond <= expiredSecond)
+                    DateTime expiredDate = _cache.Get<DateTime>(account);
+                    Console.WriteLine($"缓存中的TOKEN过期时间:{expiredDate}");
+                    DateTime nowDate = DateTime.Now;
+                    Console.WriteLine($"调用接口时间:{nowDate}");
+                    if (nowDate <= expiredDate)
                     {
-                        expiredSecond = (long)(nowSecond + PermissionRequirement.Expiration.TotalSeconds);
-                        //Console.WriteLine($"刷新TOKEN过期时间:{expiredSecond}");
-                        _cache.Set(account, expiredSecond);
+                        expiredDate = nowDate.Add(PermissionRequirement.Expiration);
+                        Console.WriteLine($"刷新TOKEN过期时间:{expiredDate}");
+                        _cache.Set(account, expiredDate);
                     }
                     else
                     {
+                        Console.WriteLine($"TOKEN过期:{expiredDate}");
                         //_cache.Del(account);//回收过期token
                         context.Fail();
                         return;

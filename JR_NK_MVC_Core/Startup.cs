@@ -171,7 +171,7 @@ namespace JR_NK_MVC_Core
             PermissionRequirement.Audience = config.Audience;
             PermissionRequirement.Expiration = TimeSpan.FromSeconds(config.Expiration);
             PermissionRequirement.SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(config.SecretKey)), SecurityAlgorithms.HmacSha256);
-            PermissionRequirement permissionRequirement = new PermissionRequirement();
+            PermissionRequirement permissionRequirement = new();
             return permissionRequirement;
         }
     }

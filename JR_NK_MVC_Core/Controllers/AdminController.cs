@@ -46,7 +46,7 @@ namespace JR_NK_MVC_Core.Controllers
                 if (permissionStringList == null) return GlobalResponse.Of(-1, "权限加载失败");
                 keyValues.TryGetValue("menus", out object permissionMenuList);
                 if (permissionMenuList == null) return GlobalResponse.Of(-1, "权限菜单加载失败");
-                //_cache.Set($"{req.Username}-permission-menu", keyValues); //方便测试可先取消缓存
+                _cache.Set($"{req.Username}-permission-menu", keyValues); //方便测试可先取消缓存
                 var tokenJson = await _adminService.GetJwtTokenAsync((List<string>)permissionStringList, req.Username);
                 if (tokenJson == null) return GlobalResponse.Of(-1, "获取TOKEN失败");
                 return GlobalResponse.Of(new LoginRes { User = user, PermissionMenuList = (List<PermissionMenu>)permissionMenuList, TokenJson = tokenJson });

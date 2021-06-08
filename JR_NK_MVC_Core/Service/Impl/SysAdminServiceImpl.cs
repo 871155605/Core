@@ -241,11 +241,10 @@ namespace JR_NK_MVC_Core.Service.Impl
                 );
                 var encodedJwt = "Bearer " + new JwtSecurityTokenHandler().WriteToken(jwt);
                 #region 自定义校验token时间
-                long nowSecond = (long)new TimeSpan(DateTime.UtcNow.Ticks).TotalSeconds;
-                //Console.WriteLine($"登录时间:{nowSecond}");
-                long expiredSecond = (long)(nowSecond + PermissionRequirement.Expiration.TotalSeconds);
-                //Console.WriteLine($"TOKEN过期时间:{expiredSecond}");
-                _cache.Set(uniqueName, expiredSecond);
+                Console.WriteLine($"登录时间:{now}");
+                DateTime expiredDate = now.Add(PermissionRequirement.Expiration);
+                Console.WriteLine($"TOKEN过期时间:{expiredDate}");
+                _cache.Set(uniqueName,expiredDate);
                 #endregion
                 return encodedJwt;
             });

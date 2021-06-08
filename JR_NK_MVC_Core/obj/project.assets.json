@@ -2,7 +2,7 @@
   "version": 3,
   "targets": {
     "net5.0": {
-      "Ben.Demystifier/0.3.0": {
+      "Ben.Demystifier/0.4.1": {
         "type": "package",
         "dependencies": {
           "System.Reflection.Metadata": "5.0.0"
@@ -62,12 +62,12 @@
           "lib/net5.0/Dapper.dll": {}
         }
       },
-      "Furion/1.18.4": {
+      "Furion/2.8.0": {
         "type": "package",
         "dependencies": {
-          "Furion.Extras.DependencyModel.CodeAnalysis": "1.18.4",
+          "Furion.Extras.DependencyModel.CodeAnalysis": "2.8.0",
           "MiniProfiler.AspNetCore.Mvc": "4.2.22",
-          "Swashbuckle.AspNetCore": "6.1.1"
+          "Swashbuckle.AspNetCore": "6.1.4"
         },
         "compile": {
           "lib/net5.0/Furion.dll": {}
@@ -79,13 +79,13 @@
           "Microsoft.AspNetCore.App"
         ]
       },
-      "Furion.Extras.DependencyModel.CodeAnalysis/1.18.4": {
+      "Furion.Extras.DependencyModel.CodeAnalysis/2.8.0": {
         "type": "package",
         "dependencies": {
-          "Ben.Demystifier": "0.3.0",
-          "Microsoft.AspNetCore.Razor.Language": "5.0.4",
+          "Ben.Demystifier": "0.4.1",
+          "Microsoft.AspNetCore.Razor.Language": "5.0.6",
           "Microsoft.CodeAnalysis.CSharp": "3.9.0",
-          "Microsoft.EntityFrameworkCore.Relational": "5.0.4",
+          "Microsoft.EntityFrameworkCore.Relational": "5.0.6",
           "Microsoft.Extensions.DependencyModel": "5.0.0"
         },
         "compile": {
@@ -255,7 +255,7 @@
           "buildTransitive/net5.0/Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation.targets": {}
         }
       },
-      "Microsoft.AspNetCore.Razor.Language/5.0.4": {
+      "Microsoft.AspNetCore.Razor.Language/5.0.6": {
         "type": "package",
         "compile": {
           "lib/netstandard2.0/Microsoft.AspNetCore.Razor.Language.dll": {}
@@ -499,11 +499,11 @@
           }
         }
       },
-      "Microsoft.EntityFrameworkCore/5.0.4": {
+      "Microsoft.EntityFrameworkCore/5.0.6": {
         "type": "package",
         "dependencies": {
-          "Microsoft.EntityFrameworkCore.Abstractions": "5.0.4",
-          "Microsoft.EntityFrameworkCore.Analyzers": "5.0.4",
+          "Microsoft.EntityFrameworkCore.Abstractions": "5.0.6",
+          "Microsoft.EntityFrameworkCore.Analyzers": "5.0.6",
           "Microsoft.Extensions.Caching.Memory": "5.0.0",
           "Microsoft.Extensions.DependencyInjection": "5.0.1",
           "Microsoft.Extensions.Logging": "5.0.0",
@@ -518,7 +518,7 @@
           "lib/netstandard2.1/Microsoft.EntityFrameworkCore.dll": {}
         }
       },
-      "Microsoft.EntityFrameworkCore.Abstractions/5.0.4": {
+      "Microsoft.EntityFrameworkCore.Abstractions/5.0.6": {
         "type": "package",
         "compile": {
           "lib/netstandard2.1/Microsoft.EntityFrameworkCore.Abstractions.dll": {}
@@ -527,7 +527,7 @@
           "lib/netstandard2.1/Microsoft.EntityFrameworkCore.Abstractions.dll": {}
         }
       },
-      "Microsoft.EntityFrameworkCore.Analyzers/5.0.4": {
+      "Microsoft.EntityFrameworkCore.Analyzers/5.0.6": {
         "type": "package",
         "compile": {
           "lib/netstandard2.0/_._": {}
@@ -566,10 +566,10 @@
           "lib/netstandard2.1/Microsoft.EntityFrameworkCore.DynamicLinq.dll": {}
         }
       },
-      "Microsoft.EntityFrameworkCore.Relational/5.0.4": {
+      "Microsoft.EntityFrameworkCore.Relational/5.0.6": {
         "type": "package",
         "dependencies": {
-          "Microsoft.EntityFrameworkCore": "5.0.4",
+          "Microsoft.EntityFrameworkCore": "5.0.6",
           "Microsoft.Extensions.Configuration.Abstractions": "5.0.0"
         },
         "compile": {
@@ -1315,13 +1315,13 @@
           "lib/netstandard2.0/ICSharpCode.SharpZipLib.dll": {}
         }
       },
-      "Swashbuckle.AspNetCore/6.1.1": {
+      "Swashbuckle.AspNetCore/6.1.4": {
         "type": "package",
         "dependencies": {
           "Microsoft.Extensions.ApiDescription.Server": "3.0.0",
-          "Swashbuckle.AspNetCore.Swagger": "6.1.1",
-          "Swashbuckle.AspNetCore.SwaggerGen": "6.1.1",
-          "Swashbuckle.AspNetCore.SwaggerUI": "6.1.1"
+          "Swashbuckle.AspNetCore.Swagger": "6.1.4",
+          "Swashbuckle.AspNetCore.SwaggerGen": "6.1.4",
+          "Swashbuckle.AspNetCore.SwaggerUI": "6.1.4"
         },
         "build": {
           "build/Swashbuckle.AspNetCore.props": {}
@@ -1352,7 +1352,7 @@
           "lib/net5.0/Swashbuckle.AspNetCore.Filters.Abstractions.dll": {}
         }
       },
-      "Swashbuckle.AspNetCore.Swagger/6.1.1": {
+      "Swashbuckle.AspNetCore.Swagger/6.1.4": {
         "type": "package",
         "dependencies": {
           "Microsoft.OpenApi": "1.2.3"
@@ -1367,10 +1367,10 @@
           "Microsoft.AspNetCore.App"
         ]
       },
-      "Swashbuckle.AspNetCore.SwaggerGen/6.1.1": {
+      "Swashbuckle.AspNetCore.SwaggerGen/6.1.4": {
         "type": "package",
         "dependencies": {
-          "Swashbuckle.AspNetCore.Swagger": "6.1.1"
+          "Swashbuckle.AspNetCore.Swagger": "6.1.4"
         },
         "compile": {
           "lib/net5.0/Swashbuckle.AspNetCore.SwaggerGen.dll": {}
@@ -1379,7 +1379,7 @@
           "lib/net5.0/Swashbuckle.AspNetCore.SwaggerGen.dll": {}
         }
       },
-      "Swashbuckle.AspNetCore.SwaggerUI/6.1.1": {
+      "Swashbuckle.AspNetCore.SwaggerUI/6.1.4": {
         "type": "package",
         "compile": {
           "lib/net5.0/Swashbuckle.AspNetCore.SwaggerUI.dll": {}
@@ -2927,34 +2927,20 @@
     }
   },
   "libraries": {
-    "Ben.Demystifier/0.3.0": {
-      "sha512": "7mTSt0PLeXomarrTXdLcdYAg+zaOunw3KEvWKQ0fQaGySwqOzGxKVq8BDgUXWAyBH2hKhXldkG7uKJGkYBhDiw==",
+    "Ben.Demystifier/0.4.1": {
+      "sha512": "axFeEMfmEORy3ipAzOXG/lE+KcNptRbei3F0C4kQCdeiQtW+qJW90K5iIovITGrdLt8AjhNCwk5qLSX9/rFpoA==",
       "type": "package",
-      "path": "ben.demystifier/0.3.0",
+      "path": "ben.demystifier/0.4.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "ben.demystifier.0.3.0.nupkg.sha512",
+        "ben.demystifier.0.4.1.nupkg.sha512",
         "ben.demystifier.nuspec",
+        "icon.png",
         "lib/net45/Ben.Demystifier.dll",
         "lib/netstandard2.0/Ben.Demystifier.dll",
         "lib/netstandard2.1/Ben.Demystifier.dll",
-        "src/Ben.Demystifier/Ben.Demystifier.csproj",
-        "src/Ben.Demystifier/EnhancedStackFrame.cs",
-        "src/Ben.Demystifier/EnhancedStackTrace.Frames.cs",
-        "src/Ben.Demystifier/EnhancedStackTrace.cs",
-        "src/Ben.Demystifier/Enumerable/EnumerableIList.cs",
-        "src/Ben.Demystifier/Enumerable/EnumeratorIList.cs",
-        "src/Ben.Demystifier/Enumerable/IEnumerableIList.cs",
-        "src/Ben.Demystifier/ExceptionExtentions.cs",
-        "src/Ben.Demystifier/Internal/ILReader.cs",
-        "src/Ben.Demystifier/Internal/PortablePdbReader.cs",
-        "src/Ben.Demystifier/Internal/ReflectionHelper.cs",
-        "src/Ben.Demystifier/ResolvedMethod.cs",
-        "src/Ben.Demystifier/ResolvedParameter.cs",
-        "src/Ben.Demystifier/StringBuilderExtentions.cs",
-        "src/Ben.Demystifier/TypeNameHelper.cs",
-        "src/Ben.Demystifier/ValueTupleResolvedParameter.cs"
+        "readme.md"
       ]
     },
     "Chsword.Excel2Object/2.0.0.143": {
@@ -3016,28 +3002,28 @@
         "lib/netstandard2.0/Dapper.xml"
       ]
     },
-    "Furion/1.18.4": {
-      "sha512": "bla1lX+97G2V+lwEgwLhG5nO7VOYqIRDV+72OgMWb4GqTU2F4o//PGYcqcKfuifi5qN3OE5SPGE8leUwcRqkfQ==",
+    "Furion/2.8.0": {
+      "sha512": "+LFTIYY5s2MHMhy3owMVCmyruPxp3aDBmlE+uN7iZOrDm2xfi7+ocXWIF1OFV9/R0o/MUgYOgxmo3OOBDiKM3A==",
       "type": "package",
-      "path": "furion/1.18.4",
+      "path": "furion/2.8.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "furion.1.18.4.nupkg.sha512",
+        "furion.2.8.0.nupkg.sha512",
         "furion.nuspec",
         "icon.png",
         "lib/net5.0/Furion.dll",
         "lib/net5.0/Furion.xml"
       ]
     },
-    "Furion.Extras.DependencyModel.CodeAnalysis/1.18.4": {
-      "sha512": "iFdLpbR93xHOBq1xoEKm1u6+kwRTUFTgPfsBrEiW0neU5PQqlimdqzoO3sQkcfMTuQGWlEHwTeevGcB+xF2MZw==",
+    "Furion.Extras.DependencyModel.CodeAnalysis/2.8.0": {
+      "sha512": "TaHjgTyoexmWnryVtFUUHATWMOB6MtHp568DJCBWicSMtRebmGQUVz1zRtJt3kOQyupSX+XC6aS3iw3oPO7Zyg==",
       "type": "package",
-      "path": "furion.extras.dependencymodel.codeanalysis/1.18.4",
+      "path": "furion.extras.dependencymodel.codeanalysis/2.8.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "furion.extras.dependencymodel.codeanalysis.1.18.4.nupkg.sha512",
+        "furion.extras.dependencymodel.codeanalysis.2.8.0.nupkg.sha512",
         "furion.extras.dependencymodel.codeanalysis.nuspec",
         "icon.png",
         "lib/net5.0/Furion.Extras.DependencyModel.CodeAnalysis.dll",
@@ -3268,17 +3254,17 @@
         "microsoft.aspnetcore.mvc.razor.runtimecompilation.nuspec"
       ]
     },
-    "Microsoft.AspNetCore.Razor.Language/5.0.4": {
-      "sha512": "8N1MLq6XITwIdvqubyCtELor6SFdlOKOb+RvjLKEj2VzJzisox1FM0CRNx55lsQoAUDisnj35uPTyDqC0x7i8w==",
+    "Microsoft.AspNetCore.Razor.Language/5.0.6": {
+      "sha512": "nrkAnHCRt6DrxCJ7DwZX+PjBJffR8GAL6IkXcZIAlJ61rBKC2vzobk5STDhnL0PU7PwpRZMShilmTqWOvPxFbQ==",
       "type": "package",
-      "path": "microsoft.aspnetcore.razor.language/5.0.4",
+      "path": "microsoft.aspnetcore.razor.language/5.0.6",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Icon.png",
         "THIRD-PARTY-NOTICES.TXT",
         "lib/netstandard2.0/Microsoft.AspNetCore.Razor.Language.dll",
-        "microsoft.aspnetcore.razor.language.5.0.4.nupkg.sha512",
+        "microsoft.aspnetcore.razor.language.5.0.6.nupkg.sha512",
         "microsoft.aspnetcore.razor.language.nuspec"
       ]
     },
@@ -3673,45 +3659,45 @@
         "runtimes/win-x86/native/Microsoft.Data.SqlClient.SNI.pdb"
       ]
     },
-    "Microsoft.EntityFrameworkCore/5.0.4": {
-      "sha512": "upRpXluUeONMYO+O3RU8G+ZZcrnDrnNVWg4eJmSfertTdw7Hc5tgIeg/O8+oBKqf+OvBrQKW0U3PI9yoTsuPYg==",
+    "Microsoft.EntityFrameworkCore/5.0.6": {
+      "sha512": "uEqAprroH469aPCZm4iPA1oD8/YDqEQT9QjINkq4HWFA2kRh7Dm2lXX4uZ4MAzpcxoWCqKni2KbLqG8I0KnGqw==",
       "type": "package",
-      "path": "microsoft.entityframeworkcore/5.0.4",
+      "path": "microsoft.entityframeworkcore/5.0.6",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Icon.png",
         "lib/netstandard2.1/Microsoft.EntityFrameworkCore.dll",
         "lib/netstandard2.1/Microsoft.EntityFrameworkCore.xml",
-        "microsoft.entityframeworkcore.5.0.4.nupkg.sha512",
+        "microsoft.entityframeworkcore.5.0.6.nupkg.sha512",
         "microsoft.entityframeworkcore.nuspec"
       ]
     },
-    "Microsoft.EntityFrameworkCore.Abstractions/5.0.4": {
-      "sha512": "4y+y28SHjniLIqj7M7YNRO8khBnCBtkM6TJG8oX0wyEZuLum+3e9vqqna1naaV6Hi4BhXBHcD/sjhIfW1u0ZfQ==",
+    "Microsoft.EntityFrameworkCore.Abstractions/5.0.6": {
+      "sha512": "mZCwrwaiE3dSfJZZLihPueGJ2L5/vPU8VPpz21lErYIMmtZmxfSqocXe65bLlwMQ6EO/OcW7P+tvHWPsrAzMTg==",
       "type": "package",
-      "path": "microsoft.entityframeworkcore.abstractions/5.0.4",
+      "path": "microsoft.entityframeworkcore.abstractions/5.0.6",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Icon.png",
         "lib/netstandard2.1/Microsoft.EntityFrameworkCore.Abstractions.dll",
         "lib/netstandard2.1/Microsoft.EntityFrameworkCore.Abstractions.xml",
-        "microsoft.entityframeworkcore.abstractions.5.0.4.nupkg.sha512",
+        "microsoft.entityframeworkcore.abstractions.5.0.6.nupkg.sha512",
         "microsoft.entityframeworkcore.abstractions.nuspec"
       ]
     },
-    "Microsoft.EntityFrameworkCore.Analyzers/5.0.4": {
-      "sha512": "z8OMwlXcUZJCArcDdhR0NRkmS0UyNg08l1LXPZCgYqjBeW8RvNXshH3H5ru/7IOVpyOfKrG5Q3nsgdD18OFG/g==",
+    "Microsoft.EntityFrameworkCore.Analyzers/5.0.6": {
+      "sha512": "PhcaRr/5NgTVjm43ITSPSYQGYCUkyuBV1gEDipLnDZI+VsYwyr2HH8pHXDUaY1E6dkZoiWNRt+XNMAsK3qDIKQ==",
       "type": "package",
-      "path": "microsoft.entityframeworkcore.analyzers/5.0.4",
+      "path": "microsoft.entityframeworkcore.analyzers/5.0.6",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Icon.png",
         "analyzers/dotnet/cs/Microsoft.EntityFrameworkCore.Analyzers.dll",
         "lib/netstandard2.0/_._",
-        "microsoft.entityframeworkcore.analyzers.5.0.4.nupkg.sha512",
+        "microsoft.entityframeworkcore.analyzers.5.0.6.nupkg.sha512",
         "microsoft.entityframeworkcore.analyzers.nuspec"
       ]
     },
@@ -3744,17 +3730,17 @@
         "microsoft.entityframeworkcore.dynamiclinq.nuspec"
       ]
     },
-    "Microsoft.EntityFrameworkCore.Relational/5.0.4": {
-      "sha512": "9Qa6SqX+hJZogo99bICsS6kgQ1C5RtEjPrsvQxjInVdY9QSWsXWIYfem0rv3wi+htwkJuMHVHGSaqG1oeAwe+w==",
+    "Microsoft.EntityFrameworkCore.Relational/5.0.6": {
+      "sha512": "zzmO/cAcvsFeU3Ey6643GiLl4hCgGpWdcCW8LHsHP35zmfTirnjm2PrB+wf1wYQlPNyGT9+uypbVSoOopg58Mg==",
       "type": "package",
-      "path": "microsoft.entityframeworkcore.relational/5.0.4",
+      "path": "microsoft.entityframeworkcore.relational/5.0.6",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Icon.png",
         "lib/netstandard2.1/Microsoft.EntityFrameworkCore.Relational.dll",
         "lib/netstandard2.1/Microsoft.EntityFrameworkCore.Relational.xml",
-        "microsoft.entityframeworkcore.relational.5.0.4.nupkg.sha512",
+        "microsoft.entityframeworkcore.relational.5.0.6.nupkg.sha512",
         "microsoft.entityframeworkcore.relational.nuspec"
       ]
     },
@@ -4860,15 +4846,15 @@
         "sharpziplib.nuspec"
       ]
     },
-    "Swashbuckle.AspNetCore/6.1.1": {
-      "sha512": "qeGNdISDXqZT2oYWwFWgCiYTnJFxU3qYzZ+xyM/iU/kvI/KWlJGHTxlhLb3giAFxFZM5nRgkHGFb8yfNgr7+kQ==",
+    "Swashbuckle.AspNetCore/6.1.4": {
+      "sha512": "aglxV+kJA5wP0RoAS8Rrh4Jp7bmVEcDAAofdSyGfea4TSEtNRLam9Fq0A4+0asUWDRk1N0/6VnuLC6+ev50wSQ==",
       "type": "package",
-      "path": "swashbuckle.aspnetcore/6.1.1",
+      "path": "swashbuckle.aspnetcore/6.1.4",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "build/Swashbuckle.AspNetCore.props",
-        "swashbuckle.aspnetcore.6.1.1.nupkg.sha512",
+        "swashbuckle.aspnetcore.6.1.4.nupkg.sha512",
         "swashbuckle.aspnetcore.nuspec"
       ]
     },
@@ -4900,10 +4886,10 @@
         "swashbuckle.aspnetcore.filters.abstractions.nuspec"
       ]
     },
-    "Swashbuckle.AspNetCore.Swagger/6.1.1": {
-      "sha512": "JbLsVspdKevDJ6NZT+uP06Zfr1iCDbFjmIvUyoG88GgFkM/Daaq2EGUAG7INZl+FEcoVxPG9A+yWRik75ATGbw==",
+    "Swashbuckle.AspNetCore.Swagger/6.1.4": {
+      "sha512": "5XRKPKXpQRJMdOwHgotSZjWYGKnvresUIKiUOecmDrsiTkRpUd15QJMS/+HKYjjOvWnJthYwhLJG3pABJOHwOg==",
       "type": "package",
-      "path": "swashbuckle.aspnetcore.swagger/6.1.1",
+      "path": "swashbuckle.aspnetcore.swagger/6.1.4",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -4916,14 +4902,14 @@
         "lib/netstandard2.0/Swashbuckle.AspNetCore.Swagger.dll",
         "lib/netstandard2.0/Swashbuckle.AspNetCore.Swagger.pdb",
         "lib/netstandard2.0/Swashbuckle.AspNetCore.Swagger.xml",
-        "swashbuckle.aspnetcore.swagger.6.1.1.nupkg.sha512",
+        "swashbuckle.aspnetcore.swagger.6.1.4.nupkg.sha512",
         "swashbuckle.aspnetcore.swagger.nuspec"
       ]
     },
-    "Swashbuckle.AspNetCore.SwaggerGen/6.1.1": {
-      "sha512": "kfoGF5scayoUVXo9wIN8OgvdYJr97V/yPdSrLNXcvbthOCU1vXTv8HJQMJ3OGyG9CpIAp2wfHI2gCmvbVKkMCQ==",
+    "Swashbuckle.AspNetCore.SwaggerGen/6.1.4": {
+      "sha512": "i0Y3a3XMKz7r9vMNtB7TUIsWXpz9uJwnJ42NV3lAnmem7XpTykxm/cFJqHc9CqVBdbPf7XPvhUvEiUybRlocIg==",
       "type": "package",
-      "path": "swashbuckle.aspnetcore.swaggergen/6.1.1",
+      "path": "swashbuckle.aspnetcore.swaggergen/6.1.4",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -4936,14 +4922,14 @@
         "lib/netstandard2.0/Swashbuckle.AspNetCore.SwaggerGen.dll",
         "lib/netstandard2.0/Swashbuckle.AspNetCore.SwaggerGen.pdb",
         "lib/netstandard2.0/Swashbuckle.AspNetCore.SwaggerGen.xml",
-        "swashbuckle.aspnetcore.swaggergen.6.1.1.nupkg.sha512",
+        "swashbuckle.aspnetcore.swaggergen.6.1.4.nupkg.sha512",
         "swashbuckle.aspnetcore.swaggergen.nuspec"
       ]
     },
-    "Swashbuckle.AspNetCore.SwaggerUI/6.1.1": {
-      "sha512": "NlR3zDm0kGWNClJWPzWrGBoQn4SY6Fgpz9D5p30bKsUYzFfM7L5vVo88BktpUyCJb6zHtCOsazN+vzQn7NVjUg==",
+    "Swashbuckle.AspNetCore.SwaggerUI/6.1.4": {
+      "sha512": "Ue8Ag73DOXPPB/NCqT7oN1PYSj35IETWROsIZG9EbwAtFDcgonWOrHbefjMFUGyPalNm6CSmVm1JInpURnxMgw==",
       "type": "package",
-      "path": "swashbuckle.aspnetcore.swaggerui/6.1.1",
+      "path": "swashbuckle.aspnetcore.swaggerui/6.1.4",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -4956,7 +4942,7 @@
         "lib/netstandard2.0/Swashbuckle.AspNetCore.SwaggerUI.dll",
         "lib/netstandard2.0/Swashbuckle.AspNetCore.SwaggerUI.pdb",
         "lib/netstandard2.0/Swashbuckle.AspNetCore.SwaggerUI.xml",
-        "swashbuckle.aspnetcore.swaggerui.6.1.1.nupkg.sha512",
+        "swashbuckle.aspnetcore.swaggerui.6.1.4.nupkg.sha512",
         "swashbuckle.aspnetcore.swaggerui.nuspec"
       ]
     },
@@ -9521,7 +9507,7 @@
       "CSRedisCore >= 3.6.6",
       "Chsword.Excel2Object >= 2.0.0.143",
       "Dapper >= 2.0.78",
-      "Furion >= 1.18.4",
+      "Furion >= 2.8.0",
       "IdentityModel >= 5.0.1",
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 5.0.3",
       "Microsoft.AspNetCore.Authorization >= 5.0.3",
@@ -9534,7 +9520,7 @@
       "Microsoft.Extensions.Logging.Console >= 5.0.0",
       "Microsoft.Extensions.Options.ConfigurationExtensions >= 5.0.0",
       "NPOI >= 2.5.3",
-      "Swashbuckle.AspNetCore >= 6.1.1",
+      "Swashbuckle.AspNetCore >= 6.1.4",
       "Swashbuckle.AspNetCore.Filters >= 7.0.2",
       "log4net >= 2.0.12"
     ]
@@ -9592,7 +9578,7 @@
           },
           "Furion": {
             "target": "Package",
-            "version": "[1.18.4, )"
+            "version": "[2.8.0, )"
           },
           "IdentityModel": {
             "target": "Package",
@@ -9646,7 +9632,7 @@
           },
           "Swashbuckle.AspNetCore": {
             "target": "Package",
-            "version": "[6.1.1, )"
+            "version": "[6.1.4, )"
           },
           "Swashbuckle.AspNetCore.Filters": {
             "target": "Package",

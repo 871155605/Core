@@ -14,7 +14,7 @@ namespace JR_NK_MVC_Core.Common.Socket
 {
     public class WebSocketFilter : ActionFilterAttribute
     {
-        private ILoggerHelper _logger;
+/*        private ILoggerHelper _logger;
         public WebSocketFilter(ILoggerHelper logger)
         {
             _logger = logger;
@@ -41,6 +41,6 @@ namespace JR_NK_MVC_Core.Common.Socket
             {
                 _logger.Error(typeof(WebSocketFilter),$"StackTrace:{e.StackTrace} Message:{e.Message}");
             }
-        }
+        }*/
     }
 }

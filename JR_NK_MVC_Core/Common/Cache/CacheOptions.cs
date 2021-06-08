@@ -1,5 +1,4 @@
-﻿using Furion.ConfigurableOptions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,7 +8,7 @@ namespace JR_NK_MVC_Core.Common.Cache
     /// <summary>
     /// 缓存配置
     /// </summary>
-    public class CacheOptions : IConfigurableOptions
+    public class CacheOptions
     {
         /// <summary>
         /// 缓存类型

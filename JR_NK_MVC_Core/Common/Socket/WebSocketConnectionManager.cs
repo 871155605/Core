@@ -14,7 +14,7 @@ namespace JR_NK_MVC_Core.Common.Socket
 {
     public class WebSocketConnectionManager
     {
-        public static readonly ConcurrentDictionary<string, WebSocket> sockets = new ConcurrentDictionary<string, WebSocket>();
+        public static readonly ConcurrentDictionary<string, WebSocket> sockets = new();
 
         /// <summary>
         /// 保持WebSocket连接
@@ -42,7 +42,7 @@ namespace JR_NK_MVC_Core.Common.Socket
             #region 保持SOCKET连接并实时接收客户端消息
             var flagAdd = sockets.TryAdd(socketId, socket);
             _logger.Info(typeof(WebSocketConnectionManager), $"保持SOCKET连接并实时接收客户端消息:{socketId}-{flagAdd}");
-            ArraySegment<byte> buffer = new ArraySegment<byte>(new byte[2048]);
+            ArraySegment<byte> buffer = new(new byte[2048]);
             WebSocketReceiveResult result = await socket.ReceiveAsync(buffer, CancellationToken.None);
             while (!result.CloseStatus.HasValue)
             {

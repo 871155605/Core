@@ -1,5 +1,4 @@
-﻿using Furion.ConfigurableOptions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,7 +8,7 @@ namespace JR_NK_MVC_Core.Common.Configuration
     /// <summary>
     /// 上传文件配置类
     /// </summary>
-    public class UploadOptions : IConfigurableOptions
+    public class UploadOptions
     {
         /// <summary>
         /// 存储类型

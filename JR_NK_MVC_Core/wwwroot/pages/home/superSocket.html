@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <script type="text/javascript">
+    var ws = new WebSocket('ws://192.168.10.152:7010');
+
+    function send() {
+        ws.send({ FCode:1});
+    }
+
+    window.onbeforeunload = function () {
+        if (ws) {
+            ws.onclose = function () { };
+            ws.close();
+        }
+    }
+
+    ws.onopen = function () {
+        console.log('连接成功');
+        ws.send("1234");
+    }
+
+    ws.onmessage = function (evt) {
+        console.log('服务器响应:' + evt.data);
+    }
+
+    ws.onerror = function (evt) {
+        console.log('连接错误:' + JSON.stringify(evt));
+    }
+
+    ws.onclose = function () {
+        console.log('连接关闭');
+    }
+    </script>
+</body>
+</html>
